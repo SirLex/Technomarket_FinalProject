@@ -1,0 +1,56 @@
+Action map
+
+User
+- register
+- login / logout
+- get by id
+- edit user information
+- give admin rights (admin)
+- delete user
+- subscribe / unsubscribe
+- get orders
+- get reviews
+- get favorite products
+
+Review
+- get user reviews by id
+- edit review by id
+- delete review by id
+
+Orders
+- get by id
+- add product to cart
+- remove product from cart
+- get all products from cart
+- order
+
+Categories
+- get all categories
+
+SubCategories
+- get available attributes for this subcategory
+- get all subcategories related to category id
+
+Attributes
+- add
+- remove
+- get atributes by name/value
+
+Products
+- add product (admin)
+- delete product (admin)
+- add attribute to the product (admin)
+- remove attribute from the product (admin)
+- get product by id
+- get all products
+- get all products with filters for attributes/brands/price/discount combined
+- add product to favorites
+- get reviews for product
+- get rating
+- get product images
+- create review by user id
+
+Discounts
+- add discount(admin)
+- edit discount (admin)
+- get discount by id
