@@ -29,6 +29,6 @@ public class ProductDTO {
     private BigDecimal price;
 
     private Integer discount;
-    
+
     private Long subCategoryId;
 }
