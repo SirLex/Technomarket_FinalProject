@@ -38,7 +38,7 @@ public class AddNewAddressDTO {
 
     @NotNull
     private String district;
-    
+
     @NotBlank
     @Pattern(regexp = "^[0-9\\-\\+]{4,4}$", message = "Invalid ZIP CODE")
     private String zip;
