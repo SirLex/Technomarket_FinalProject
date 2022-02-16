@@ -2,6 +2,7 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.model.dtos.UserChangePasswordDTO;
 import com.technomarket.model.dtos.UserEditInformationDTO;
 import com.technomarket.model.dtos.UserRegisterDTO;
 import com.technomarket.model.dtos.UserResponseDTO;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
@@ -86,6 +88,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public UserResponseDTO edit(int userID, UserEditInformationDTO dto) {
         if (!userRepository.existsById(userID)) {
             throw new NotFoundException("User with this id doesnt exist");
@@ -99,6 +102,29 @@ public class UserService {
         user.setDateOfBirth(dto.getDateOfBirth());
         user.setMale(dto.isMale());
         userRepository.save(user);
-        return mapper.map(user,UserResponseDTO.class);
+        return mapper.map(user, UserResponseDTO.class);
+    }
+
+    @Transactional
+    public UserResponseDTO changePassword(int userID, UserChangePasswordDTO dto) {
+        if (!userRepository.existsById(userID)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userID).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+
+        if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
+            throw new BadRequestException("New passwords miss match");
+        }
+
+        String encodedPassword = user.getPassword();
+        if (!passwordEncoder.matches(dto.getPassword(), encodedPassword)) {
+            throw new AuthorizationException("Wrong old password");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+        return mapper.map(user, UserResponseDTO.class);
     }
 }
