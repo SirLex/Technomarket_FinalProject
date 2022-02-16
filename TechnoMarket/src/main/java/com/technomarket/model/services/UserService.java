@@ -49,6 +49,7 @@ public class UserService {
         u.setEmail(email);
         u.setPassword(passwordEncoder.encode(password));
         u.setAddress(address);
+        u.setPhone(phone);
         u.setDateOfBirth(dateOfBirth);
         u.setAdmin(false);
         u.setSubscribed(isSubscribed);
