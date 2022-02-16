@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RestController
 @Validated
@@ -31,13 +32,6 @@ public class UserController {
     private ModelMapper modelMapper;
 
 
-    @PostMapping("/user/registration")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto){
-        User u = userService.registerUser(dto);
-        UserResponseDTO returnDto = modelMapper.map(u,UserResponseDTO.class);
-        return new ResponseEntity<>(returnDto,HttpStatus.ACCEPTED);
-    }
-
     @PostMapping("/user/login")
     public  ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto, HttpSession session, HttpServletRequest request) {
         UserResponseDTO userResponseDTO = userService.login(dto.getEmail(),dto.getPassword());
@@ -45,6 +39,19 @@ public class UserController {
         session.setAttribute("logged_from", request.getRemoteAddr());
         session.setAttribute(USER_ID, userResponseDTO.getId());
         return new ResponseEntity<>(userResponseDTO,HttpStatus.OK);
+    }
+
+    @PostMapping("/user/registration")
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto){
+        User u = userService.registerUser(dto);
+        UserResponseDTO returnDto = modelMapper.map(u,UserResponseDTO.class);
+        return new ResponseEntity<>(returnDto,HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/user/logout")
+    public ResponseEntity<MessageDTO> logout(HttpSession session, HttpServletRequest request){
+        session.invalidate();
+        return new ResponseEntity<>(new MessageDTO("You have been loged out.", LocalDateTime.now()),HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/user/{id}")

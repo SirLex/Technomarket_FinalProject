@@ -41,6 +41,10 @@ Content-Type: application/json
 
 }
 
+### logout
+POST localhost:9998/user/logout
+Content-Type: application/json
+
 ### edit of logged user
 PUT localhost:9998/user/info
 Content-Type: application/json
