@@ -17,10 +17,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorDTO handleNotFound(Exception exception) {
-
-        //TODO
-        return null;
+    public ErrorDTO handleNotFound(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
     }
 
     @ExceptionHandler(BadRequestException.class)

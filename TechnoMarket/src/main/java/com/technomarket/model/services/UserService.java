@@ -64,11 +64,14 @@ public class UserService {
     }
 
     public UserResponseDTO login(String email, String password) {
-        User u = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
-        if(u == null){
-            throw new AuthorizationException("Wrong credentials");
+        if (!userRepository.existsByEmail(email)) {
+            throw new BadRequestException("No account with that email");
         }
-        return mapper.map(u,UserResponseDTO.class);
+        User u = userRepository.findByEmail(email);
+        if (!passwordEncoder.matches(password, u.getPassword())) {
+            throw new BadRequestException("Wrong credentials");
+        }
+        return mapper.map(u, UserResponseDTO.class);
 
     }
 }
