@@ -1,0 +1,17 @@
+### register
+POST localhost:9999/user/registration
+Content-Type: application/json
+{
+    "firstName": "Alex",
+    "lastName": "Kolachev",
+    "email": "alex4o@abv.bg",
+    "password": "asd4!ASDa",
+    "confirmPassword": "asd4!ASDa",
+    "address": "Sofia, idk",
+    "phone": "08881717881",
+    "dateOfBirth": "2002-01-01",
+    "male": true,
+    "subscribed": false
+}
+
+###
