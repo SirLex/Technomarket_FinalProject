@@ -1,9 +1,11 @@
 package com.technomarket.controller;
 
+import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,5 +21,15 @@ public class GlobalExceptionHandler {
 
         //TODO
         return null;
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleBadRequest(Exception e){
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        return dto;
     }
 }
