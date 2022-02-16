@@ -27,7 +27,7 @@ public class AddReviewDTO {
 
     @NotNull
     @Length(min = 10)
-    private String text;
+    private String comment;
 
     @NotNull
     @Min(1)
