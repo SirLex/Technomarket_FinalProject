@@ -25,7 +25,7 @@ public class ProductService {
         }
     }
 
-    public ProductWithAllDTO getProduct(long productId) {
+    public ProductWithAllDTO getProduct(int productId) {
 
         //TODO
         return null;
