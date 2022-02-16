@@ -1,6 +1,8 @@
 package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
+import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.model.dtos.UserEditInformationDTO;
 import com.technomarket.model.dtos.UserRegisterDTO;
 import com.technomarket.model.dtos.UserResponseDTO;
 import com.technomarket.model.pojos.User;
@@ -73,5 +75,30 @@ public class UserService {
         }
         return mapper.map(u, UserResponseDTO.class);
 
+    }
+
+    public UserResponseDTO getById(int id) {
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("User with this id not found");
+        }
+        User u = userRepository.getById(id);
+        return mapper.map(u, UserResponseDTO.class);
+
+    }
+
+    public UserResponseDTO edit(int userID, UserEditInformationDTO dto) {
+        if (!userRepository.existsById(userID)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userID).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setAddress(dto.getAddress());
+        user.setDateOfBirth(dto.getDateOfBirth());
+        user.setMale(dto.isMale());
+        userRepository.save(user);
+        return mapper.map(user,UserResponseDTO.class);
     }
 }
