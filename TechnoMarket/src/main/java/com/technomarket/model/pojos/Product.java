@@ -1,5 +1,6 @@
 package com.technomarket.model.pojos;
 
+import com.technomarket.model.dtos.ProductDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,4 +30,10 @@ public class Product {
     @Column
     private int discountID;
 
+
+    public Product(ProductDTO productDTO) {
+
+        this.name=productDTO.getName();
+
+    }
 }
