@@ -34,34 +34,7 @@ public class UserService {
         boolean isSubscribed = dto.isSubscribed();
         boolean isMale = dto.isMale();
 
-        //Verifying if any of the fields are blank
-        if (firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()) {
-            throw new EmptyFieldException("Both names are mandatory for registration");
-        }
-        if (email == null || email.isBlank()) {
-            throw new EmptyFieldException("Password is mandatory for registration");
-        }
-        if (password == null || password.isBlank() || confirmPassword == null || confirmPassword.isBlank()) {
-            throw new EmptyFieldException("Password is mandatory for registration");
-        }
-        if (address == null || email.isBlank()) {
-            throw new EmptyFieldException("Address is mandatory for registration");
-        }
-        if (dateOfBirth == null) {
-            throw new EmptyFieldException("Date of birth is mandatory for registration");
-        }
-        if (phone == null || phone.isBlank()) {
-            throw new EmptyFieldException("Phone number is mandatory for registration");
-        }
-
-        //Validation for requirements of fields
-        String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
-        if (!emailPattern.matcher(email).matches()) {
-            throw new BadRequestException("Email is not valid");
-        }
-
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.existsByEmail(email)) {
             throw new BadRequestException("User with that email already exists");
         }
 
@@ -69,11 +42,6 @@ public class UserService {
             throw new BadRequestException("Passwords does not match");
         }
 
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\\\S+$).{8,20}$";
-        Pattern passwordPattern = Pattern.compile(passwordRegex);
-        if (!passwordPattern.matcher(passwordRegex).matches()) {
-            throw new BadRequestException("Password does not match requirements");
-        }
 
         User u = new User();
         u.setFirstName(firstName);
