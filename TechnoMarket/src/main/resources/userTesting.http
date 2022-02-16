@@ -28,7 +28,7 @@ Content-Type: application/json
 
 
 ### getUserById
-GET localhost:9998/user/19
+GET localhost:9998/user/20
 
 
 ### login
@@ -66,4 +66,41 @@ Content-Type: application/json
   "password": "123456Az",
   "newPassword": "Az123456",
   "confirmNewPassword": "Az123456"
+}
+
+
+### register user for delete
+POST localhost:9998/user/registration
+Content-Type: application/json
+
+{
+  "firstName": "Ivancho",
+  "lastName": "Kalpazancho",
+  "email": "ivan4oo@abv.bg",
+  "password": "123456Az",
+  "confirmPassword": "123456Az",
+  "address": "Plovdiv, Kapana",
+  "phone": "0927889182",
+  "dateOfBirth": "2001-01-01",
+  "subscribed": false,
+  "male": true
+}
+
+### login into soon to be deleted user
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "ivan4oo@abv.bg",
+  "password": "123456Az"
+
+}
+
+### delete user
+DELETE localhost:9998/user
+Content-Type: application/json
+
+{
+  "password": "123456Az",
+  "confirmPassword": "123456Az"
 }

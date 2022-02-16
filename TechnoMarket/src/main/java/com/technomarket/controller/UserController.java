@@ -4,6 +4,7 @@ import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.*;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.services.UserService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,13 @@ public class UserController {
     public ResponseEntity<MessageDTO> logout(HttpSession session, HttpServletRequest request){
         session.invalidate();
         return new ResponseEntity<>(new MessageDTO("You have been loged out.", LocalDateTime.now()),HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/user")
+    public MessageDTO delete(@Valid @RequestBody PasswordRequestDTO dto , HttpSession session){
+        int userId = (int)session.getAttribute(USER_ID);
+        MessageDTO responseDTO = userService.deleteUser(userId,dto);
+        return responseDTO;
     }
 
     @GetMapping("/user/{id}")

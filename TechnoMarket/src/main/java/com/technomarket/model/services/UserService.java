@@ -2,10 +2,7 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
-import com.technomarket.model.dtos.UserChangePasswordDTO;
-import com.technomarket.model.dtos.UserEditInformationDTO;
-import com.technomarket.model.dtos.UserRegisterDTO;
-import com.technomarket.model.dtos.UserResponseDTO;
+import com.technomarket.model.dtos.*;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @Service
@@ -126,5 +124,21 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
         return mapper.map(user, UserResponseDTO.class);
+    }
+
+    public MessageDTO deleteUser(int userId, PasswordRequestDTO dto) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            throw new BadRequestException("Passwords miss match");
+        }
+
+        userRepository.delete(user);
+        return new MessageDTO("Delete successfully", LocalDateTime.now());
     }
 }
