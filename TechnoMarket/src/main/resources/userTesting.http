@@ -1,5 +1,5 @@
 ### register
-POST localhost:9999/user/registration
+POST localhost:9998/user/registration
 Content-Type: application/json
 {
     "firstName": "Alex",
@@ -14,4 +14,41 @@ Content-Type: application/json
     "subscribed": false
 }
 
+###Registration Ivan
+
+POST localhost:9998/user/registration
+Content-Type: application/json
+
+{
+    "firstName": "Ivan",
+    "lastName": "Atanasov",
+    "email": "ivan@abv.bg",
+    "password": "123456Az",
+    "confirmPassword": "123456Az",
+    "address": "Sofia, mladost4",
+    "phone": "0889224499",
+    "dateOfBirth": "1997-01-01",
+    "male": true,
+    "subscribed": true
+}
+
 ###
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "ivan@abv.bg",
+  "password": "123456Az"
+
+}
+
+###
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+"email": "alex4o@abv.bg",
+"password": "asd4!ASDa"
+
+}
+

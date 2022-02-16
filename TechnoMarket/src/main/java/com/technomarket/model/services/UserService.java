@@ -1,10 +1,13 @@
 package com.technomarket.model.services;
 
+import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.UserRegisterDTO;
+import com.technomarket.model.dtos.UserResponseDTO;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.EmptyFieldException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModelMapper mapper;
 
     public User registerUser(UserRegisterDTO dto) {
         String firstName = dto.getFirstName();
@@ -42,7 +48,6 @@ public class UserService {
             throw new BadRequestException("Passwords does not match");
         }
 
-
         User u = new User();
         u.setFirstName(firstName);
         u.setLastName(lastName);
@@ -56,5 +61,14 @@ public class UserService {
         u.setMale(isMale);
         userRepository.save(u);
         return u;
+    }
+
+    public UserResponseDTO login(String email, String password) {
+        User u = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
+        if(u == null){
+            throw new AuthorizationException("Wrong credentials");
+        }
+        return mapper.map(u,UserResponseDTO.class);
+
     }
 }
