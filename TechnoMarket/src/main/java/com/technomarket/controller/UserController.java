@@ -59,6 +59,7 @@ public class UserController {
     public MessageDTO delete(@Valid @RequestBody PasswordRequestDTO dto , HttpSession session){
         int userId = (int)session.getAttribute(USER_ID);
         MessageDTO responseDTO = userService.deleteUser(userId,dto);
+        session.invalidate();
         return responseDTO;
     }
 
@@ -84,7 +85,7 @@ public class UserController {
     }
 
     private void validateLogin(HttpSession session, HttpServletRequest request) {
-        if(session.isNew() ||
+        if(session.isNew() || (session.getAttribute(LOGGED)==null)||
                 (!(Boolean)session.getAttribute(LOGGED)) ||
                 (!request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM)))){
             throw new AuthorizationException("You have to login!");
