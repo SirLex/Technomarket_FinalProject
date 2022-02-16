@@ -1,5 +1,6 @@
 package com.technomarket.controller;
 
+import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.ErrorDTO;
@@ -32,6 +33,16 @@ public class GlobalExceptionHandler {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg(e.getMessage());
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        return dto;
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDTO handleAuthorization(Exception e){
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.UNAUTHORIZED.value());
         dto.setTime(LocalDateTime.now());
         return dto;
     }

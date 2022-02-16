@@ -1,8 +1,8 @@
 package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
-import com.technomarket.model.dtos.UserRegisterDTO;
-import com.technomarket.model.dtos.UserResponseDTO;
+import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.model.dtos.*;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @Service
@@ -73,5 +75,70 @@ public class UserService {
         }
         return mapper.map(u, UserResponseDTO.class);
 
+    }
+
+    public UserResponseDTO getById(int id) {
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("User with this id not found");
+        }
+        User u = userRepository.getById(id);
+        return mapper.map(u, UserResponseDTO.class);
+
+    }
+
+    @Transactional
+    public UserResponseDTO edit(int userID, UserEditInformationDTO dto) {
+        if (!userRepository.existsById(userID)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userID).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setAddress(dto.getAddress());
+        user.setDateOfBirth(dto.getDateOfBirth());
+        user.setMale(dto.isMale());
+        userRepository.save(user);
+        return mapper.map(user, UserResponseDTO.class);
+    }
+
+    @Transactional
+    public UserResponseDTO changePassword(int userID, UserChangePasswordDTO dto) {
+        if (!userRepository.existsById(userID)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userID).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+
+        if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
+            throw new BadRequestException("New passwords miss match");
+        }
+
+        String encodedPassword = user.getPassword();
+        if (!passwordEncoder.matches(dto.getPassword(), encodedPassword)) {
+            throw new AuthorizationException("Wrong old password");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+        return mapper.map(user, UserResponseDTO.class);
+    }
+
+    public MessageDTO deleteUser(int userId, PasswordRequestDTO dto) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            throw new BadRequestException("Passwords miss match");
+        }
+
+        userRepository.delete(user);
+        return new MessageDTO("Delete successfully", LocalDateTime.now());
     }
 }
