@@ -1,6 +1,7 @@
 package com.technomarket.model.dtos;
 
 
+import com.technomarket.model.pojos.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,16 @@ public class GetProductReviewDTO {
 
     private String title;
 
-    private String text;
+    private String comment;
 
     private int rating;
 
     private LocalDate date;
 
-
+    public GetProductReviewDTO(Review review) {
+        setId(review.getId());
+        setComment(review.getComment());
+        setRating(review.getRating());
+        setDate(review.getDate());
+    }
 }
