@@ -1,0 +1,16 @@
+### login into admin profile
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "alex4o@abv.bg",
+  "password": "asd4!ASDa"
+}
+
+### add attribute
+POST localhost:9998/attribute
+Content-Type: application/json
+
+{
+  "name": "RAM"
+}
