@@ -25,6 +25,9 @@ public class ProductService {
     @Autowired
     private SubcategoryService subcategoryService;
 
+    @Autowired
+    private DiscountService discountService;
+
     public ProductResponseDTO addProduct(ProductAddDTO productDTO) {
         if(productRepository.existsByName(productDTO.getName())){
            throw new BadRequestException("Product with that name already exists");
@@ -36,8 +39,6 @@ public class ProductService {
         product.setSubcategory(subcategoryService.getWholeById(productDTO.getSubcategoryId()));
         product.setPrice(productDTO.getPrice());
         product.setInfo(productDTO.getInfo());
-        //TODO WITH DISCOUNT!!!!!!!!!!!!!!!!!!!!!!!!!
-        product.setDiscountId(1);
 
         productRepository.save(product);
 
@@ -49,6 +50,16 @@ public class ProductService {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         return productRepository.getById(id);
+    }
+
+    public ProductResponseDTO addDiscountToProduct(int productId, int discountId) {
+        if(!productRepository.existsById(productId)){
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+        Product product = productRepository.getById(productId);
+        product.setDiscount(discountService.getWholeDiscountById(discountId));
+        productRepository.save(product);
+        return new ProductResponseDTO(product);
     }
 
 /*

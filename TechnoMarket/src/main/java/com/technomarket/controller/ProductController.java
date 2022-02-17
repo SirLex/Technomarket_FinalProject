@@ -31,10 +31,20 @@ public class ProductController {
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
-        //TODO add attributes
-        ProductResponseDTO response = productService.addProduct(productDTO);
 
+        ProductResponseDTO response = productService.addProduct(productDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/product/{productId}/discount/{discountId}")
+    public ResponseEntity<ProductResponseDTO> addDiscountToProduct(@PathVariable int productId, @PathVariable int discountId, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        userService.adminValidation(userId);
+
+        ProductResponseDTO responseDTO = productService.addDiscountToProduct(productId, discountId);
+        return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/product/{id}")

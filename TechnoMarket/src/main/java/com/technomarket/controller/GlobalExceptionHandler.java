@@ -6,7 +6,6 @@ import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleBadRequest(Exception e){
+    public ErrorDTO handleBadRequest(Exception e) {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg(e.getMessage());
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -39,7 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorDTO handleAuthorization(Exception e){
+    public ErrorDTO handleAuthorization(Exception e) {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg(e.getMessage());
         dto.setStatus(HttpStatus.UNAUTHORIZED.value());
