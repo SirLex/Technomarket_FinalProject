@@ -1,0 +1,43 @@
+### login into admin profile
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "alex4o@abv.bg",
+  "password": "asd4!ASDa"
+
+}
+
+### add new discount
+POST localhost:9998/discount
+Content-Type: application/json
+
+{
+  "title": "Easter Discount",
+  "discountPercentage": 10,
+  "startAt": "2022-05-01T00:00:00.000Z",
+  "endAt": "2022-04-01T00:00:00.000Z"
+}
+
+### add new discount 2
+POST localhost:9998/discount
+Content-Type: application/json
+
+{
+  "title": "Xmas Discount",
+  "discountPercentage": 15,
+  "startAt": "2022-12-01T00:00:00",
+  "endAt": "2023-01-01T00:00:00"
+}
+
+
+### edit Xmas
+PUT localhost:9998/discount/3
+Content-Type: application/json
+
+{
+  "title": "Christmas Discount",
+  "discountPercentage": 20,
+  "startAt": "2022-12-01T00:00:00",
+  "endAt": "2023-01-01T00:00:00"
+}
