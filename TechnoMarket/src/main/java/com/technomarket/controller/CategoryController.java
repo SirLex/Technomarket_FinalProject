@@ -7,6 +7,8 @@ import com.technomarket.model.pojos.Category;
 import com.technomarket.model.services.CategoryService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,29 +33,30 @@ public class CategoryController {
     private UserService userService;
 
     @PostMapping("/category")
-    public CategoryResponseDTO createCategory(@Valid @RequestBody CategoryAddDTO categoryDTO, HttpServletRequest request) {
+    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryAddDTO categoryDTO, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.adminValidation(userId);
         CategoryResponseDTO responseDTO = categoryService.addCategory(categoryDTO);
-        return responseDTO;
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/category/{id}")
-    public CategoryResponseDTO getCategoryById(@PathVariable int id) {
-        return categoryService.getById(id);
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable int id) {
+        CategoryResponseDTO responseDTO = categoryService.getById(id);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/category/all")
-    public List<CategoryResponseDTO> getAllCategories() {
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
 
         List<CategoryResponseDTO> responseCategoryDTOList = new ArrayList<>();
         for (Category c : categories) {
             responseCategoryDTOList.add(new CategoryResponseDTO(c));
         }
-        return responseCategoryDTOList;
+        return new ResponseEntity<>(responseCategoryDTOList,HttpStatus.OK);
     }
 }
 

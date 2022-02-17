@@ -32,9 +32,8 @@ SubCategories
 - get all subcategories related to category id
 
 Attributes
-- add
-- remove
-- get atribute
+- add (admin)
+- get atribute by Id
 
 Products
 - add product (admin)
