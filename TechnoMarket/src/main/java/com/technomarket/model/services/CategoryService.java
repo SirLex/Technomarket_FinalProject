@@ -37,4 +37,12 @@ public class CategoryService {
         }
         return new CategoryResponseDTO(categoryRepository.getById(id));
     }
+
+    public Category getWholeById(int id) {
+        System.out.println("Id of category: "+id);
+        if (!categoryRepository.existsById(id)) {
+            throw new BadRequestException("Category with this id doesn't exist");
+        }
+        return categoryRepository.getById(id);
+    }
 }

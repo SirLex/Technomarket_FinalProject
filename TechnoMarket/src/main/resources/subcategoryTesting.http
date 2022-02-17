@@ -1,0 +1,35 @@
+### create subcategory Phones
+POST localhost:9998/subcategory
+Content-Type: application/json
+
+{
+  "name": "Phones",
+  "categoryId": 1
+}
+
+### create subcategory Tablets
+POST localhost:9998/subcategory
+Content-Type: application/json
+
+{
+  "name": "Tablets",
+  "categoryId": 1
+}
+
+### login into admin profile
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "alex4o@abv.bg",
+  "password": "asd4!ASDa"
+
+}
+
+### get all subcategories
+GET localhost:9998/subcategory/all
+Content-Type: application/json
+
+### get subcategory by id
+GET localhost:9998/subcategory/1
+Content-Type: application/json
