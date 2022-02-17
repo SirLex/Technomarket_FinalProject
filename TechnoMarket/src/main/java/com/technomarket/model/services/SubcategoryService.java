@@ -19,6 +19,9 @@ public class SubcategoryService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private AttributeService attributeService;
+
     public SubcategoryResponseDTO addSubcategory(SubcategoryAddDTO subcategoryDTO) {
         if (subcategoryRepository.existsByName(subcategoryDTO.getName())) {
             throw new BadRequestException("Subcategory already exists");
@@ -36,8 +39,21 @@ public class SubcategoryService {
         }
         return new SubcategoryResponseDTO(subcategoryRepository.getById(id));
     }
-
     public List<Subcategory> getAllSubcategories() {
         return subcategoryRepository.findAll();
+    }
+
+    private Subcategory getWholeById(int id) {
+        if (!subcategoryRepository.existsById(id)) {
+            throw new BadRequestException("Subcategory with this id doesn't exists");
+        }
+        return subcategoryRepository.getById(id);
+    }
+
+    public SubcategoryResponseDTO addAttributeToAllowed(int subId, int attId) {
+        Subcategory subcategory = getWholeById(subId);
+        subcategory.getAllowedAttributes().add(attributeService.getById(attId));
+        subcategoryRepository.save(subcategory);
+        return new SubcategoryResponseDTO(subcategory);
     }
 }

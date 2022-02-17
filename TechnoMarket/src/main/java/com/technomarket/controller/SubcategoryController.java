@@ -46,6 +46,17 @@ public class SubcategoryController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
+    @PostMapping("/subcategory/{subId}/addatribute/{attId}")
+    public ResponseEntity<SubcategoryResponseDTO> addAttributeToAllowed(@PathVariable int subId, @PathVariable int attId, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.adminValidation(userId);
+
+        SubcategoryResponseDTO responseDTO = subcategoryService.addAttributeToAllowed(subId,attId);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
     @GetMapping("/subcategory/{id}")
     public ResponseEntity<SubcategoryResponseDTO> getSubcategoryById(@PathVariable int id) {
         SubcategoryResponseDTO responseDTO = subcategoryService.getById(id);

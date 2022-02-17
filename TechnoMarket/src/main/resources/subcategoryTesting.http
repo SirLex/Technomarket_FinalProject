@@ -33,3 +33,9 @@ Content-Type: application/json
 ### get subcategory by id
 GET localhost:9998/subcategory/1
 Content-Type: application/json
+
+
+
+### add attribute to subcategory
+POST localhost:9998/subcategory/1/addatribute/1
+Content-Type: application/json
