@@ -1,8 +1,8 @@
 package com.technomarket.controller;
 
 import com.technomarket.model.dtos.MessageDTO;
-import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.dtos.discount.DiscountAddDTO;
+import com.technomarket.model.dtos.discount.DiscountResponseDTO;
 import com.technomarket.model.pojos.Discount;
 import com.technomarket.model.services.DiscountService;
 import com.technomarket.model.services.UserService;
@@ -39,19 +39,19 @@ public class DiscountController {
     }
 
     @PutMapping("/discount/{id}")
-    public ResponseEntity<MessageDTO> editDiscountById(@Valid @RequestBody DiscountAddDTO dto, @PathVariable int id, HttpServletRequest request){
+    public ResponseEntity<DiscountResponseDTO> editDiscountById(@Valid @RequestBody DiscountAddDTO dto, @PathVariable int id, HttpServletRequest request){
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
 
-        Discount response = discountService.editDiscount(dto,id);
-        return new ResponseEntity<>(new MessageDTO("Change is made", LocalDateTime.now()),HttpStatus.ACCEPTED);
+        DiscountResponseDTO response = discountService.editDiscount(dto,id);
+        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/discount/{id}")
-    public ResponseEntity<Discount> getDiscountById(@PathVariable int id){
-        Discount response = discountService.getDiscountById(id);
+    public ResponseEntity<DiscountResponseDTO> getDiscountById(@PathVariable int id){
+        DiscountResponseDTO response = discountService.getDiscountById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
