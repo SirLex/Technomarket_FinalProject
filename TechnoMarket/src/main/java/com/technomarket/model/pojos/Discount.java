@@ -3,6 +3,7 @@ package com.technomarket.model.pojos;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class Discount {
     @Column
     private int discountPercentage;
     @Column
-    private LocalDateTime startDate;
+    private LocalDateTime startAt;
     @Column
-    private LocalDateTime endDate;
+    private LocalDateTime endAt;
 }
