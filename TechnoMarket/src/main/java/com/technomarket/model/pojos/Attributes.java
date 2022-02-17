@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "attributes")
@@ -19,4 +20,7 @@ public class Attributes {
     private int id;
     @Column
     private String name;
+
+    @ManyToMany(mappedBy = "allowedAttributes")
+    Set<Subcategory> subcategories;
 }
