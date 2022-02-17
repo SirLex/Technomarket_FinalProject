@@ -33,7 +33,7 @@ public class UserController {
 
 
     @PostMapping("/user/login")
-    public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto,  HttpServletRequest request) {
+    public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto, HttpServletRequest request) {
         UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute(LOGGED, true);
@@ -44,7 +44,7 @@ public class UserController {
 
     @PostMapping("/user/registration")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto) {
-        UserResponseDTO returnDto =userService.registerUser(dto);
+        UserResponseDTO returnDto = userService.registerUser(dto);
         return new ResponseEntity<>(returnDto, HttpStatus.ACCEPTED);
     }
 
@@ -91,9 +91,9 @@ public class UserController {
 
     public static void validateLogin(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        boolean logged = (session.getAttribute(LOGGED) != null) || ((Boolean) session.getAttribute(LOGGED));
-        boolean sameAddress = request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM));
-        if (session.isNew() || !logged || !sameAddress) {
+        boolean notLogged = (session.getAttribute(LOGGED) == null) || (!(Boolean) session.getAttribute(LOGGED));
+        boolean notSameAddress = (session.getAttribute(LOGGED_FROM) == null) || request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM));
+        if (session.isNew() || notLogged || notSameAddress) {
             throw new AuthorizationException("You have to login!");
         }
     }
