@@ -1,6 +1,5 @@
 package com.technomarket.model.pojos;
 
-import com.technomarket.model.dtos.product.ProductResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,13 +22,14 @@ public class Product {
     private String brand;
 
     @ManyToOne
-    @JoinColumn(name ="sub_category_id")
+    @JoinColumn(name = "sub_category_id")
     private Subcategory subcategory;
 
     @Column
     private double price;
     @Column
     private String info;
-    @Column
-    private int discountId;
+    @ManyToOne
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
 }

@@ -2,6 +2,7 @@ package com.technomarket.model.dtos.product;
 
 
 import com.sun.istack.NotNull;
+import com.technomarket.model.dtos.discount.DiscountResponseDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryResponseWithoutCategoryDTO;
 import com.technomarket.model.pojos.Discount;
 import com.technomarket.model.pojos.Product;
@@ -39,7 +40,7 @@ public class ProductResponseDTO {
     @NotBlank
     private String info;
 
-    //private Discount discount;
+    private DiscountResponseDTO discount;
 
     public ProductResponseDTO(Product product){
         this.id=product.getId();
@@ -48,5 +49,6 @@ public class ProductResponseDTO {
         this.subcategory = new SubcategoryResponseWithoutCategoryDTO(product.getSubcategory());
         this.price = product.getPrice();
         this.info = product.getInfo();
+        this.discount = new DiscountResponseDTO(product.getDiscount());
     }
 }
