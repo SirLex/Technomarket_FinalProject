@@ -16,17 +16,20 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     @Column
     private String name;
     @Column
     private String brand;
-    @Column
-    private int subcategoryID;
+
+    @ManyToOne
+    @JoinColumn(name ="sub_category_id")
+    private Subcategory subcategory;
+
     @Column
     private double price;
     @Column
     private String info;
     @Column
-    private int discountID;
+    private int discountId;
 }
