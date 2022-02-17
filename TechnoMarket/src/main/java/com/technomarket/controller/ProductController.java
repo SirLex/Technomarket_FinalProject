@@ -1,18 +1,15 @@
 package com.technomarket.controller;
 
 
-import com.technomarket.model.dtos.ProductDTO;
-import com.technomarket.model.dtos.ProductFilteringDTO;
-import com.technomarket.model.dtos.ProductWithAllDTO;
+import com.technomarket.model.dtos.MessageDTO;
+import com.technomarket.model.dtos.product.ProductRequestDTO;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.services.ProductService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -20,16 +17,17 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
-    @SneakyThrows
-    @GetMapping("/products/{productId}")
-    public ProductWithAllDTO getProduct(@PathVariable(name = "productId") int productId) {
-        return productService.getProduct(productId);
+    @GetMapping("/product/{id}")
+    public ProductResponseDTO getById(@PathVariable int id){
     }
 
-    @SneakyThrows
-    @GetMapping("/products/search")
-    public List<ProductDTO> productsFromSearch(@Valid ProductFilteringDTO ProductFilteringDTO) {
-        return productService.productsFromSearch(ProductFilteringDTO);
+    @PutMapping("/add/product")
+    public ProductResponseDTO addProduct(@Valid @RequestBody ProductRequestDTO productDTO, HttpSession session){
     }
+
+    @DeleteMapping("/product/{id}")
+    public MessageDTO deleteProduct(@PathVariable int id, HttpSession session){
+
+    }
+
 }

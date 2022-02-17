@@ -1,5 +1,6 @@
 package com.technomarket.model.dtos;
 
+import com.technomarket.model.dtos.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

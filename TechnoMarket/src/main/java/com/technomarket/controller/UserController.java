@@ -2,11 +2,10 @@ package com.technomarket.controller;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.*;
+import com.technomarket.model.dtos.user.*;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.services.UserService;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

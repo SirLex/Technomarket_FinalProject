@@ -1,4 +1,4 @@
-package com.technomarket.model.dtos;
+package com.technomarket.model.dtos.product;
 
 
 import com.sun.istack.NotNull;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class ProductDTO {
+public class ProductResponseDTO {
 
     private long id;
 

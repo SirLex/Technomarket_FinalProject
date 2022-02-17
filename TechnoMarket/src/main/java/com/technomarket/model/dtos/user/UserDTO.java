@@ -1,4 +1,4 @@
-package com.technomarket.model.dtos;
+package com.technomarket.model.dtos.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

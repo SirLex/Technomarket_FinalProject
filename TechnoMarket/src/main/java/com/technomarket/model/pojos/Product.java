@@ -1,6 +1,6 @@
 package com.technomarket.model.pojos;
 
-import com.technomarket.model.dtos.ProductDTO;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +31,7 @@ public class Product {
     private int discountID;
 
 
-    public Product(ProductDTO productDTO) {
+    public Product(ProductResponseDTO productDTO) {
 
         this.name=productDTO.getName();
 

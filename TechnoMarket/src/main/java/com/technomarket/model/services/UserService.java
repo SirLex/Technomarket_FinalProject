@@ -3,10 +3,13 @@ package com.technomarket.model.services;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.*;
+import com.technomarket.model.dtos.user.UserChangePasswordDTO;
+import com.technomarket.model.dtos.user.UserEditInformationDTO;
+import com.technomarket.model.dtos.user.UserRegisterDTO;
+import com.technomarket.model.dtos.user.UserResponseDTO;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
-import com.technomarket.exceptions.EmptyFieldException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
