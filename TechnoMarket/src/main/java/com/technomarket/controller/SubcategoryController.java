@@ -11,6 +11,8 @@ import com.technomarket.model.services.CategoryService;
 import com.technomarket.model.services.SubcategoryService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,29 +37,30 @@ public class SubcategoryController {
     private UserService userService;
 
     @PostMapping("/subcategory")
-    public SubcategoryResponseDTO createSubcategory(@Valid @RequestBody SubcategoryAddDTO subcategoryDTO, HttpServletRequest request) {
+    public ResponseEntity<SubcategoryResponseDTO> createSubcategory(@Valid @RequestBody SubcategoryAddDTO subcategoryDTO, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.adminValidation(userId);
         SubcategoryResponseDTO responseDTO = subcategoryService.addSubcategory(subcategoryDTO);
-        return responseDTO;
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/subcategory/{id}")
-    public SubcategoryResponseDTO getSubcategoryById(@PathVariable int id) {
-        return subcategoryService.getById(id);
+    public ResponseEntity<SubcategoryResponseDTO> getSubcategoryById(@PathVariable int id) {
+        SubcategoryResponseDTO responseDTO = subcategoryService.getById(id);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     @GetMapping("/subcategory/all")
-    public List<SubcategoryResponseDTO> getAllSubcategories() {
+    public ResponseEntity<List<SubcategoryResponseDTO>> getAllSubcategories() {
         List<Subcategory> subcategories = subcategoryService.getAllSubcategories();
 
         List<SubcategoryResponseDTO> responseSubcategoryDTOList = new ArrayList<>();
         for (Subcategory sc : subcategories) {
             responseSubcategoryDTOList.add(new SubcategoryResponseDTO(sc));
         }
-        return responseSubcategoryDTOList;
+        return new ResponseEntity<>(responseSubcategoryDTOList,HttpStatus.OK);
     }
 }
 
