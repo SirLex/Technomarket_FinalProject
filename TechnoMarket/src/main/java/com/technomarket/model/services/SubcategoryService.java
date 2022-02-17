@@ -17,7 +17,7 @@ public class SubcategoryService {
     private SubcategoryRepository subcategoryRepository;
 
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     public SubcategoryResponseDTO addSubcategory(SubcategoryAddDTO subcategoryDTO) {
         if (subcategoryRepository.existsByName(subcategoryDTO.getName())) {

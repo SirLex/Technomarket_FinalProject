@@ -31,21 +31,22 @@ public class CategoryController {
     private UserService userService;
 
     @PostMapping("/category")
-    public CategoryResponseDTO createCategory(@Valid @RequestBody CategoryAddDTO categoryDTO, HttpSession session, HttpServletRequest request){
-        validateLogin(session,request);
-        int userId = (int)session.getAttribute(USER_ID);
-        adminValidation(userId);
+    public CategoryResponseDTO createCategory(@Valid @RequestBody CategoryAddDTO categoryDTO, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.adminValidation(userId);
         CategoryResponseDTO responseDTO = categoryService.addCategory(categoryDTO);
         return responseDTO;
     }
 
     @GetMapping("/category/{id}")
-    public CategoryResponseDTO getCategoryById(@PathVariable int id){
+    public CategoryResponseDTO getCategoryById(@PathVariable int id) {
         return categoryService.getById(id);
     }
 
     @GetMapping("/category/all")
-    public List<CategoryResponseDTO> getAllCategories(){
+    public List<CategoryResponseDTO> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
 
         List<CategoryResponseDTO> responseCategoryDTOList = new ArrayList<>();
@@ -53,20 +54,6 @@ public class CategoryController {
             responseCategoryDTOList.add(new CategoryResponseDTO(c));
         }
         return responseCategoryDTOList;
-    }
-
-    private void adminValidation(int userId) {
-        if(!userService.checkAdminRights(userId)){
-            throw new AuthorizationException("You dont have the rights for this operation");
-        }
-    }
-
-    private void validateLogin(HttpSession session, HttpServletRequest request) {
-        if(session.isNew() || (session.getAttribute(LOGGED)==null)||
-                (!(Boolean)session.getAttribute(LOGGED)) ||
-                (!request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM)))){
-            throw new AuthorizationException("You have to login!");
-        }
     }
 }
 

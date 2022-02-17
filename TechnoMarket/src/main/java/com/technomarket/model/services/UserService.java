@@ -28,7 +28,7 @@ public class UserService {
     @Autowired
     private ModelMapper mapper;
 
-    public User registerUser(UserRegisterDTO dto) {
+    public UserResponseDTO registerUser(UserRegisterDTO dto) {
         String firstName = dto.getFirstName();
         String lastName = dto.getLastName();
         String email = dto.getEmail();
@@ -61,7 +61,7 @@ public class UserService {
         u.setSubscribed(isSubscribed);
         u.setMale(isMale);
         userRepository.save(u);
-        return u;
+        return mapper.map(u, UserResponseDTO.class);
     }
 
     public UserResponseDTO login(String email, String password) {
@@ -141,7 +141,13 @@ public class UserService {
         return new MessageDTO("Delete successfully", LocalDateTime.now());
     }
 
-    public boolean checkAdminRights(int userId) {
+    public void adminValidation(int userId) {
+        if (!checkAdminRights(userId)) {
+            throw new AuthorizationException("You dont have the rights for this operation");
+        }
+    }
+
+    private boolean checkAdminRights(int userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with this id doesnt exist");
         }

@@ -58,7 +58,7 @@ Content-Type: application/json
   "male": true
 }
 
-### edit of logged user
+### change password of logged user
 PUT localhost:9998/user/info/changepassword
 Content-Type: application/json
 
