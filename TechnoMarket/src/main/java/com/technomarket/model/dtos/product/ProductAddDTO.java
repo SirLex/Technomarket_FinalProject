@@ -14,20 +14,22 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class ProductRequestDTO {
-
-    private int id;
+public class ProductAddDTO {
 
     @NotBlank
     private String name;
 
     @NotBlank
-    private String description;
+    private String brand;
 
     @NotNull
-    private BigDecimal price;
+    private int subcategoryId;
 
-    private Integer discount;
+    @NotNull
+    private double price;
 
-    private Long subCategoryId;
+    @NotBlank
+    private String info;
+
+    private int discountId;
 }
