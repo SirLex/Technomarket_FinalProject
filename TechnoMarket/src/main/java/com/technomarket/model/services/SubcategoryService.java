@@ -43,7 +43,7 @@ public class SubcategoryService {
         return subcategoryRepository.findAll();
     }
 
-    private Subcategory getWholeById(int id) {
+    public Subcategory getWholeById(int id) {
         if (!subcategoryRepository.existsById(id)) {
             throw new BadRequestException("Subcategory with this id doesn't exists");
         }

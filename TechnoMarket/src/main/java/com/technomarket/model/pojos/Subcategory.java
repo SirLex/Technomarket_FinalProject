@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,9 @@ public class Subcategory {
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "subcategory")
+    private List<Product> products;
 
     @ManyToMany
     @JoinTable(
