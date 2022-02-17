@@ -1,0 +1,33 @@
+### create category Phones and Tablets
+POST localhost:9998/category
+Content-Type: application/json
+
+{
+    "name": "Phones and Tablets"
+}
+
+### create category Computers
+POST localhost:9998/category
+Content-Type: application/json
+
+{
+    "name": "Computers"
+}
+
+### login into admin profile
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "alex4o@abv.bg",
+  "password": "asd4!ASDa"
+
+}
+
+### get all categories
+GET localhost:9998/category/all
+Content-Type: application/json
+
+### get category by id
+GET localhost:9998/category/1
+Content-Type: application/json

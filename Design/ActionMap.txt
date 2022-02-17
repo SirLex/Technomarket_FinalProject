@@ -23,6 +23,8 @@ Orders
 - make order
 
 Categories
+- add category (admin)
+- get category by id
 - get all categories
 
 SubCategories

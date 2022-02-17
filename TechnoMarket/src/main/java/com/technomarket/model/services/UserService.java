@@ -143,4 +143,14 @@ public class UserService {
         userRepository.delete(user);
         return new MessageDTO("Delete successfully", LocalDateTime.now());
     }
+
+    public boolean checkAdminRights(int userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("User with this id doesnt exist");
+        }
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        return user.isAdmin();
+    }
 }
