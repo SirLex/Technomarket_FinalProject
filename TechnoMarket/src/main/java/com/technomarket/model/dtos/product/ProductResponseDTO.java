@@ -2,6 +2,8 @@ package com.technomarket.model.dtos.product;
 
 
 import com.sun.istack.NotNull;
+import com.technomarket.model.pojos.Discount;
+import com.technomarket.model.pojos.Subcategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +19,24 @@ import java.math.BigDecimal;
 
 public class ProductResponseDTO {
 
-    private long id;
+    @NotNull
+    private int id;
 
     @NotBlank
     private String name;
 
     @NotBlank
-    private String description;
+    private String brand;
 
     @NotNull
-    private BigDecimal price;
+    private Subcategory subcategory;
 
-    private Integer discount;
+    @NotNull
+    private double price;
 
-    private Long subCategoryId;
+    @NotBlank
+    private String info;
+
+
+    private Discount discount;
 }

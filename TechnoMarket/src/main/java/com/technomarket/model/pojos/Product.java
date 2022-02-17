@@ -29,11 +29,4 @@ public class Product {
     private String info;
     @Column
     private int discountID;
-
-
-    public Product(ProductResponseDTO productDTO) {
-
-        this.name=productDTO.getName();
-
-    }
 }

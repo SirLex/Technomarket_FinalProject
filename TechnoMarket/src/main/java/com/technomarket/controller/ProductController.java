@@ -16,9 +16,11 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+/*
 
     @GetMapping("/product/{id}")
     public ProductResponseDTO getById(@PathVariable int id){
+        ProductResponseDTO responseDTO = productService.getById(id);
     }
 
     @PutMapping("/add/product")
@@ -29,5 +31,6 @@ public class ProductController {
     public MessageDTO deleteProduct(@PathVariable int id, HttpSession session){
 
     }
+*/
 
 }

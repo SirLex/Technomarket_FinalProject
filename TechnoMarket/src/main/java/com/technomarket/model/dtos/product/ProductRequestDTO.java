@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 public class ProductRequestDTO {
 
-    private long id;
+    private int id;
 
     @NotBlank
     private String name;
