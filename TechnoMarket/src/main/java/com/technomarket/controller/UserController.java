@@ -92,7 +92,7 @@ public class UserController {
     public static void validateLogin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         boolean notLogged = (session.getAttribute(LOGGED) == null) || (!(Boolean) session.getAttribute(LOGGED));
-        boolean notSameAddress = (session.getAttribute(LOGGED_FROM) == null) || request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM));
+        boolean notSameAddress = (session.getAttribute(LOGGED_FROM) == null) || !request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM));
         if (session.isNew() || notLogged || notSameAddress) {
             throw new AuthorizationException("You have to login!");
         }
