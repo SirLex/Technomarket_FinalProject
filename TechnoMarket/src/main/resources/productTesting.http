@@ -21,3 +21,7 @@ Content-Type: application/json
   "info": "Very good budget phone",
   "discountId": 1
 }
+
+### adding discount to product
+POST localhost:9998/product/4/discount/2
+Content-Type: application/json
