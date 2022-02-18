@@ -172,29 +172,16 @@ public class UserService {
         });
         return user.isAdmin();
     }
-/*
 
-    public List<OrderDTO> getAllUserOrders(User user) {
-
-
-        List<Order> orders = orderRepository.findAllByUserId(user.getId());
-        if (orders.isEmpty()) {
-            throw new NotFoundException("No orders found!");
-        }
-        List<OrderDTO> orderDtoList = new ArrayList<>();
-        for (Order order : orders) {
-            OrderDTO orderDto = new OrderDTO(order.getId(),order.getPrice(),order.getCreatedAt());
-            orderDtoList.add(orderDto);
-        }
-        return orderDtoList;
-    }
-
-*/
 /*
 
     public List<ProductResponseDTO> getFavouriteProducts(int userId) {
+        if(!userRepository.existsById(userId)){
+            throw new BadRequestException("No such user exists");
+        }
 
-        List<Product> products = productRepository.findUserFavouriteProducts(userId);
+        List<Product> products = userRepository.findAllByIdOrderByFavoriteProducts(userId);
+        //List<Product> products = productRepository.findUserFavouriteProducts(userId);
         if (products.isEmpty()) {
             throw new NotFoundException("No favourite products found!");
         }
@@ -207,5 +194,28 @@ public class UserService {
     }
 
 */
- 
+    public UserResponseDTO addFavourite(int productId, int userID) {
+        if(!productRepository.existsById(productId)){
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+        Product product = productRepository.getById(productId);
+        User user = userRepository.getById(userID);
+        user.getFavoriteProducts().add(product);
+        userRepository.save(user);
+
+        return mapper.map(user,UserResponseDTO.class);
+    }
+
+    public List<OrderDTO> getAllOrdersFromUser(int userId) {
+        List<Order> orders = orderRepository.findAllByUser_Id(userId);
+        if (orders.isEmpty()) {
+            throw new NotFoundException("No orders found!");
+        }
+        List<OrderDTO> orderDtoList = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDto = new OrderDTO(order.getId(),order.getPrice(),order.getCreatedAt());
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
+    }
 }

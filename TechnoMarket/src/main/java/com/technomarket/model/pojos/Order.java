@@ -28,16 +28,15 @@ public class Order {
     private String address;
     @Column
     private LocalDate createdAt;
-    @Column
-    private LocalDate completedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy ="orderList")
-    private List<User> userList=new ArrayList<>();
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "order")
     private Set<OrderProduct> orderProducts;
 
-    public Order(){
+    public Order() {
         this.orderProducts = new HashSet<>();
     }
 

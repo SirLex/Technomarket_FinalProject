@@ -23,17 +23,6 @@ public class OrderController {
     private OrderService orderService;
 
 
-/*    @GetMapping("/user/order")
-    public ResponseEntity<List<OrderDTO>> getOrders(HttpServletRequest request) {
-        UserController.validateLogin(request);
-        HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute(UserController.USER_ID);
-        List<OrderDTO> orderDTOList = orderService.getAllOrdersFromUser(userId);
-        return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
-
-    }
-    */
-
     @PostMapping("/order")
     public ResponseEntity<MessageDTO> createOrderByListOfProducts(@RequestBody OrderCreateDTO dto, HttpServletRequest request) {
         UserController.validateLogin(request);

@@ -48,6 +48,7 @@ public class OrderService {
         return orderRepository.getById(id);
     }
 
+
     @Transactional
     public MessageDTO createOrder(OrderCreateDTO dto, int userId) {
         if (!userRepository.existsById(userId)) {
@@ -65,6 +66,7 @@ public class OrderService {
         User user = userRepository.getById(userId);
 
         Order order = new Order();
+        order.setUser(user);
         order.setPrice(totalPrice);
         order.setAddress(user.getAddress());
         order.setCreatedAt(LocalDate.now());
@@ -91,6 +93,8 @@ public class OrderService {
             orderProductRepository.save(orderProduct);
         }
         orderRepository.save(order);
+        user.getOrderList().add(order);
+        userRepository.save(user);
         return new MessageDTO("Order created", LocalDateTime.now());
     }
 
@@ -104,7 +108,7 @@ public class OrderService {
             if (product.getDiscount() != null) {
                 price = price - (price * (product.getDiscount().getDiscountPercentage() / 100.0));
             }
-            totalPrice+=price*quantity;
+            totalPrice += price * quantity;
         }
         return totalPrice;
     }

@@ -25,8 +25,6 @@ import java.util.List;
 @RestController
 public class AttributeController {
 
-    public static final String LOGGED = "logged";
-    public static final String LOGGED_FROM = "logged_from";
     public static final String USER_ID = "user_id";
 
     @Autowired

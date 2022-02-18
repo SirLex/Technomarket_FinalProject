@@ -2,6 +2,7 @@ package com.technomarket.controller;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.*;
+import com.technomarket.model.dtos.order.OrderDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
 import com.technomarket.model.pojos.User;
@@ -30,9 +31,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
 
     @PostMapping("/user/login")
@@ -82,18 +80,40 @@ public class UserController {
         UserResponseDTO responseDTO = userService.edit(userID, dto);
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
-/*
 
-    @SneakyThrows
-    @GetMapping("/users/favourites")
-    public List<ProductResponseDTO> getFavouriteProducts(HttpServletRequest request) {
+    @PostMapping("/user/favourites/{id}")
+    public ResponseEntity<UserResponseDTO> addFavouriteProduct(@PathVariable int id, HttpServletRequest request){
         validateLogin(request);
         HttpSession session = request.getSession();
         int userID = (int) session.getAttribute(USER_ID);
-        return userService.getFavouriteProducts(userID);
+
+        UserResponseDTO responseDTOS = userService.addFavourite(id,userID);
+        return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
+    }
+/*
+
+    @SneakyThrows
+    @GetMapping("/user/favourites")
+    public ResponseEntity<List<ProductResponseDTO>> getFavouriteProducts(HttpServletRequest request) {
+        validateLogin(request);
+        HttpSession session = request.getSession();
+        int userID = (int) session.getAttribute(USER_ID);
+        List<ProductResponseDTO> responseDTOS = userService.getFavouriteProducts(userID);
+        return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
     }
 
 */
+
+    @GetMapping("/user/orders")
+    public ResponseEntity<List<OrderDTO>> getOrders(HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+
+        List<OrderDTO> orderDTOList = userService.getAllOrdersFromUser(userId);
+        return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+    }
+
     @PutMapping("/user/info/changepassword")
     public ResponseEntity<UserResponseDTO> changePassword(@Valid @RequestBody UserChangePasswordDTO dto, HttpServletRequest request) {
         validateLogin(request);

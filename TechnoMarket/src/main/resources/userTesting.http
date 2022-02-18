@@ -104,3 +104,15 @@ Content-Type: application/json
   "password": "123456Az",
   "confirmPassword": "123456Az"
 }
+
+### add product to favourites
+POST localhost:9998/user/favourites/4
+Content-Type: application/json
+
+### get all favourite products
+GET localhost:9998/user/favourites
+Content-Type: application/json
+
+### get all orders
+GET localhost:9998/user/orders
+Content-Type: application/json

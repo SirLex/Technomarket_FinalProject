@@ -8,6 +8,10 @@ Content-Type: application/json
 
 }
 
+### get all orders for user
+GET localhost:9998/user/orders
+Content-Type: application/json
+
 ### order some phones
 POST localhost:9998/order
 Content-Type: application/json

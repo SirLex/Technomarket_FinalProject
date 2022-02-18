@@ -26,8 +26,6 @@ import java.util.List;
 @Validated
 public class SubcategoryController {
 
-    public static final String LOGGED = "logged";
-    public static final String LOGGED_FROM = "logged_from";
     public static final String USER_ID = "user_id";
 
     @Autowired

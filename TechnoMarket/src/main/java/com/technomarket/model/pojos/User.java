@@ -42,15 +42,13 @@ public class User {
     private boolean isMale;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "users_have_orders",joinColumns = {@JoinColumn(name="user_id")},
-    inverseJoinColumns = {@JoinColumn(name="order_id")})
+    @OneToMany(mappedBy = "user")
     private List<Order> orderList=new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "users_have_favorites",joinColumns = {@JoinColumn(name="user_id")},
+    @JoinTable(name = "users_have_favourites",joinColumns = {@JoinColumn(name="user_id")},
             inverseJoinColumns = {@JoinColumn(name="product_id")})
-    private List<Product> productList=new ArrayList<>();
+    private List<Product> favoriteProducts =new ArrayList<>();
 
 
 }

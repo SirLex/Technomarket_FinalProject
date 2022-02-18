@@ -3,7 +3,6 @@ package com.technomarket.model.pojos;
 import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -41,7 +40,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     Set<ProductAttribute> productAttribute;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "productList")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "favoriteProducts")
     private List<User> userList;
 
     @OneToMany(mappedBy = "product")
