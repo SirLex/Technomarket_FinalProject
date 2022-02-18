@@ -3,8 +3,14 @@ package com.technomarket.model.services;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.*;
+import com.technomarket.model.dtos.order.OrderDTO;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
+import com.technomarket.model.pojos.Order;
+import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.User;
+import com.technomarket.model.repositories.OrderRepository;
+import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
 import org.modelmapper.ModelMapper;
@@ -15,12 +21,22 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -156,4 +172,48 @@ public class UserService {
         });
         return user.isAdmin();
     }
+
+    public List<OrderDTO> getAllUserOrders(User user) {
+
+
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+        if (orders.isEmpty()) {
+            throw new NotFoundException("No orders found!");
+        }
+        List<OrderDTO> orderDtoList = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDto = new OrderDTO(order.getId(),order.getPrice(),order.getCreatedAt());
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
+    }
+
+
+    public List<ProductResponseDTO> getFavouriteProducts(int userId) {
+
+        List<Product> products = productRepository.findUserFavouriteProducts(userId);
+        if (products.isEmpty()) {
+            throw new NotFoundException("No favourite products found!");
+        }
+        List<ProductResponseDTO> productDto = new ArrayList<>();
+        for (Product product : products) {
+
+            productDto.add(new ProductResponseDTO(product));
+        }
+        return productDto;
+    }
+
+    @Transactional
+    public ProductResponseDTO addFavouriteProduct(int productId, User user) {
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("No such Product"));
+
+        List<Product> products = productRepository.findUserFavouriteProducts(user.getId());
+        if (products.contains(product)) {
+            throw new BadRequestException("Product is already added to favourites!");
+        }
+        //TODO
+        return null;
+    }
+
 }

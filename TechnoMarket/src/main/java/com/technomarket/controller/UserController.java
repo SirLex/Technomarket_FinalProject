@@ -2,9 +2,11 @@ package com.technomarket.controller;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.*;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.services.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Validated
@@ -78,6 +81,15 @@ public class UserController {
         int userID = (int) session.getAttribute(USER_ID);
         UserResponseDTO responseDTO = userService.edit(userID, dto);
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
+    }
+
+    @SneakyThrows
+    @GetMapping("/users/favourites")
+    public List<ProductResponseDTO> getFavouriteProducts(HttpServletRequest request) {
+        validateLogin(request);
+        HttpSession session = request.getSession();
+        int userID = (int) session.getAttribute(USER_ID);
+        return userService.getFavouriteProducts(userID);
     }
 
     @PutMapping("/user/info/changepassword")
