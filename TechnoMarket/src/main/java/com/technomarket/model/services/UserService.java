@@ -138,7 +138,7 @@ public class UserService {
         }
 
         userRepository.delete(user);
-        return new MessageDTO("Delete successfully", LocalDateTime.now());
+        return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 
     public void adminValidation(int userId) {

@@ -3,6 +3,7 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
@@ -14,6 +15,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 public class ProductService {
@@ -69,6 +71,15 @@ public class ProductService {
         product.setDiscount(discountService.getWholeDiscountById(discountId));
         productRepository.save(product);
         return new ProductResponseDTO(product);
+    }
+
+    public MessageDTO deleteProduct(int id) {
+        if (!productRepository.existsById(id)) {
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+        Product product = productRepository.getById(id);
+        productRepository.delete(product);
+        return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 
 /*

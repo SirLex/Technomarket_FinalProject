@@ -35,6 +35,10 @@ Content-Type: application/json
   "discountId": 0
 }
 
+### delete product
+DELETE localhost:9998/product/7
+
+
 ### adding discount to product
 POST localhost:9998/product/7/discount/6
 Content-Type: application/json

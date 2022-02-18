@@ -7,6 +7,8 @@ User
 - edit user information
 - delete user
 - subscribe / unsubscribe
+- get favorite products
+- add product to favorites
 
 Review
 - add review for product
@@ -18,6 +20,7 @@ Review
 Orders
 - get by id
 - get orders by user id
+- get products
 - add product
 - remove product
 - make order
@@ -41,11 +44,8 @@ Products
 - add attribute to the product (admin)
 - remove attribute from the product (admin)
 - get product by id
-- get products by order id
 - get all products with filters for attributes/brands/price/discount/subcategories combined
 - get product images
-- add product to favorites
-- get favorite products by user id
 
 Discounts
 - add discount(admin)

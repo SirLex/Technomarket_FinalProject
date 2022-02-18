@@ -47,6 +47,17 @@ public class ProductController {
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<MessageDTO> deleteProduct(@PathVariable int id, HttpServletRequest request){
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        userService.adminValidation(userId);
+
+        MessageDTO response = productService.deleteProduct(id);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
     @GetMapping("/product/{id}")
     public Product getById(@PathVariable int id) {
         return productService.getById(id);
