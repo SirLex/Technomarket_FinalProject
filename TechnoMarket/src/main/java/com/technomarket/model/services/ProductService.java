@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ProductService {
 
@@ -28,9 +30,10 @@ public class ProductService {
     @Autowired
     private DiscountService discountService;
 
+    @Transactional
     public ProductResponseDTO addProduct(ProductAddDTO productDTO) {
-        if(productRepository.existsByName(productDTO.getName())){
-           throw new BadRequestException("Product with that name already exists");
+        if (productRepository.existsByName(productDTO.getName())) {
+            throw new BadRequestException("Product with that name already exists");
         }
 
         Product product = new Product();
@@ -39,6 +42,12 @@ public class ProductService {
         product.setSubcategory(subcategoryService.getWholeById(productDTO.getSubcategoryId()));
         product.setPrice(productDTO.getPrice());
         product.setInfo(productDTO.getInfo());
+        if (productDTO.getDiscountId() == 0) {
+            product.setDiscount(null);
+        } else {
+            product.setDiscount(discountService.getWholeDiscountById(productDTO.getDiscountId()));
+        }
+
 
         productRepository.save(product);
 
@@ -46,14 +55,14 @@ public class ProductService {
     }
 
     public Product getById(int id) {
-        if(!productRepository.existsById(id)){
+        if (!productRepository.existsById(id)) {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         return productRepository.getById(id);
     }
 
     public ProductResponseDTO addDiscountToProduct(int productId, int discountId) {
-        if(!productRepository.existsById(productId)){
+        if (!productRepository.existsById(productId)) {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         Product product = productRepository.getById(productId);

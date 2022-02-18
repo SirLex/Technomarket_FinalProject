@@ -42,13 +42,15 @@ public class ProductResponseDTO {
 
     private DiscountResponseDTO discount;
 
-    public ProductResponseDTO(Product product){
-        this.id=product.getId();
+    public ProductResponseDTO(Product product) {
+        this.id = product.getId();
         this.name = product.getName();
         this.brand = product.getBrand();
         this.subcategory = new SubcategoryResponseWithoutCategoryDTO(product.getSubcategory());
         this.price = product.getPrice();
         this.info = product.getInfo();
-        this.discount = new DiscountResponseDTO(product.getDiscount());
+        if (product.getDiscount() != null) {
+            this.discount = new DiscountResponseDTO(product.getDiscount());
+        }
     }
 }

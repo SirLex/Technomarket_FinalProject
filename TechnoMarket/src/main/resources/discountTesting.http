@@ -13,10 +13,10 @@ POST localhost:9998/discount
 Content-Type: application/json
 
 {
-  "title": "Easter Discount",
-  "discountPercentage": 10,
-  "startAt": "2022-05-01T00:00:00.000Z",
-  "endAt": "2022-04-01T00:00:00.000Z"
+  "title": "Helloween Discount",
+  "discountPercentage": 13,
+  "startAt": "2022-10-01T00:00:00.000Z",
+  "endAt": "2022-11-01T00:00:00.000Z"
 }
 
 ### add new discount 2
@@ -32,11 +32,11 @@ Content-Type: application/json
 
 
 ### edit Xmas
-PUT localhost:9998/discount/3
+PUT localhost:9998/discount/6
 Content-Type: application/json
 
 {
-  "title": "Christmas Discount",
+  "title": "Helloween BOOO Discount",
   "discountPercentage": 20,
   "startAt": "2022-12-01T00:00:00",
   "endAt": "2023-01-01T00:00:00"

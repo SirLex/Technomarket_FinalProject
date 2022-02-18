@@ -22,6 +22,19 @@ Content-Type: application/json
   "discountId": 1
 }
 
+### adding product
+POST localhost:9998/product
+Content-Type: application/json
+
+{
+  "name": "Galaxy A70",
+  "brand": "Samsung",
+  "subcategoryId": 1,
+  "price": 400,
+  "info": "Not bad phone",
+  "discountId": 0
+}
+
 ### adding discount to product
-POST localhost:9998/product/4/discount/2
+POST localhost:9998/product/7/discount/6
 Content-Type: application/json

@@ -37,5 +37,5 @@ Content-Type: application/json
 
 
 ### add attribute to subcategory
-POST localhost:9998/subcategory/1/addatribute/1
+POST localhost:9998/subcategory/1/addatribute/2
 Content-Type: application/json
