@@ -90,19 +90,18 @@ public class UserController {
         UserResponseDTO responseDTOS = userService.addFavourite(id,userID);
         return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
     }
-/*
 
-    @SneakyThrows
+
     @GetMapping("/user/favourites")
     public ResponseEntity<List<ProductResponseDTO>> getFavouriteProducts(HttpServletRequest request) {
         validateLogin(request);
         HttpSession session = request.getSession();
         int userID = (int) session.getAttribute(USER_ID);
+
         List<ProductResponseDTO> responseDTOS = userService.getFavouriteProducts(userID);
         return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
     }
 
-*/
 
     @GetMapping("/user/orders")
     public ResponseEntity<List<OrderDTO>> getOrders(HttpServletRequest request) {
