@@ -2,6 +2,7 @@ package com.technomarket.model.dtos.order;
 import com.sun.istack.NotNull;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-
+@AllArgsConstructor
 public class OrderDTO {
 
     @NotNull

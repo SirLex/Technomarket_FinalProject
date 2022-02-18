@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,5 +38,8 @@ public class Product {
 
     @OneToMany(mappedBy="product")
     Set<ProductAttribute> productAttribute;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "productList")
+    private List<User> userList ;
 
 }
