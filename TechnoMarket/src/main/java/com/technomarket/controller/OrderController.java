@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 public class OrderController {
 
-    @Autowired
+   @Autowired
     private OrderService orderService;
-    @GetMapping("/user/order")
+/*    @GetMapping("/user/order")
     public ResponseEntity<List<OrderDTO>> getOrders(HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
@@ -23,7 +23,7 @@ public class OrderController {
         List<OrderDTO> orderDTOList = orderService.getAllOrdersFromUser(userId);
         return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
 
-    }
+    }*/
 
     @GetMapping("/order/{id}")
     public Order getById(@PathVariable int id) {

@@ -1,5 +1,6 @@
 package com.technomarket.model.pojos;
 
+import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,4 +24,8 @@ public class Attributes {
 
     @ManyToMany(mappedBy = "allowedAttributes")
     Set<Subcategory> subcategories;
+
+    @OneToMany(mappedBy = "attribute")
+    Set<ProductAttribute> productAttribute;
+
 }

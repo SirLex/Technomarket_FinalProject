@@ -1,12 +1,19 @@
 package com.technomarket.model.services;
 
 
+import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.model.compositekeys.ProductAttributeKey;
 import com.technomarket.model.dtos.MessageDTO;
+import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
+import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
+import com.technomarket.model.relationentity.ProductAttribute;
+import com.technomarket.model.repositories.AttributeRepository;
+import com.technomarket.model.repositories.ProductAttributeRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.ReviewRepository;
 import org.modelmapper.ModelMapper;
@@ -24,10 +31,13 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private AttributeRepository attributeRepository;
 
     @Autowired
     private SubcategoryService subcategoryService;
+
+    @Autowired
+    private ProductAttributeRepository productAttributeRepository;
 
     @Autowired
     private DiscountService discountService;
@@ -82,12 +92,38 @@ public class ProductService {
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 
-/*
-       public ProductResponseDTO getById(int id) {
-        Product product = productRepository.getById(id);
-        if(product==null){
-            throw new NotFoundException("Product not found");
+    @Transactional
+    public ProductResponseDTO addAttributeToProduct(AttributeAddValueToProductDTO dto, int productId, int attId) {
+        if (!productRepository.existsById(productId)) {
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+        if (!attributeRepository.existsById(attId)) {
+            throw new BadRequestException("Attribute with this id doesn't exist");
+        }
+        Product product = productRepository.getById(productId);
+        Attributes attribute = attributeRepository.getById(attId);
+        if(!product.getSubcategory().getAllowedAttributes().stream().anyMatch(x->x.equals(attribute))){
+            throw new AuthorizationException("Subcategory doesn't allow this attribute");
         }
 
-    }*/
+        ProductAttribute productAttribute = new ProductAttribute();
+
+        ProductAttributeKey key = new ProductAttributeKey();
+
+        key.setAttributeId(attId);
+        key.setProductId(productId);
+
+        productAttribute.setId(key);
+        productAttribute.setProduct(product);
+        productAttribute.setAttribute(attribute);
+        productAttribute.setValue(dto.getValue());
+
+        product.getProductAttribute().add(productAttribute);
+        attribute.getProductAttribute().add(productAttribute);
+
+        productAttributeRepository.save(productAttribute);
+
+        return new ProductResponseDTO(product);
+    }
+
 }

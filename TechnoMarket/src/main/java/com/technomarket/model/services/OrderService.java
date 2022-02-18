@@ -30,12 +30,12 @@ public class OrderService {
     }
 
 
-    public List<OrderDTO> getAllOrdersFromUser(int userId) {
+/*    public List<OrderDTO> getAllOrdersFromUser(int userId) {
 
         if (!userRepository.existsById(userId)) {
             throw new BadRequestException("User does not exist");
         }
         return orderRepository.findAllByUserId(userId).stream().map(OrderDTO::new).collect(Collectors.toList());
 
-    }
+    }*/
 }

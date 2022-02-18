@@ -2,6 +2,7 @@ package com.technomarket.controller;
 
 
 import com.technomarket.model.dtos.MessageDTO;
+import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
@@ -47,8 +48,19 @@ public class ProductController {
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/product/{productId}/addattribute/{attId}")
+    public ResponseEntity<ProductResponseDTO> addAttributeToProduct(@RequestBody AttributeAddValueToProductDTO dto, @PathVariable int productId, @PathVariable int attId, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        userService.adminValidation(userId);
+
+        ProductResponseDTO response = productService.addAttributeToProduct(dto,productId,attId);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<MessageDTO> deleteProduct(@PathVariable int id, HttpServletRequest request){
+    public ResponseEntity<MessageDTO> deleteProduct(@PathVariable int id, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);

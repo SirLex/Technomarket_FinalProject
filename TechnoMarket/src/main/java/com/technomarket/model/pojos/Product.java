@@ -1,10 +1,12 @@
 package com.technomarket.model.pojos;
 
+import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -32,4 +34,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
+
+    @OneToMany(mappedBy="product")
+    Set<ProductAttribute> productAttribute;
+
 }
