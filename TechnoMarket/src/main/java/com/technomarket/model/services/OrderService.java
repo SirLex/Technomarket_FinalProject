@@ -1,12 +1,14 @@
 package com.technomarket.model.services;
 
 
+import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.model.compositekeys.OrderProductKey;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
 import com.technomarket.model.dtos.order.OrderDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.User;
@@ -129,4 +131,18 @@ public class OrderService {
         return products;
     }
 
+    public List<ProductResponseDTO> getProducts(int orderId, int userId) {
+        User user = userRepository.getById(userId);
+        Order order = orderRepository.getById(orderId);
+        if (order.getUser().getId() != userId || user.isAdmin()) {
+            throw new AuthorizationException("You dont have rights to look at this");
+        }
+
+        List<Product> products = productRepository.findAllProductsInOrder(orderId);
+        List<ProductResponseDTO> responseDTOS = new ArrayList<>();
+        for (Product product : products) {
+            responseDTOS.add(new ProductResponseDTO(product));
+        }
+        return responseDTOS;
+    }
 }
