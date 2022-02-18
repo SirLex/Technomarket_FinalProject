@@ -42,3 +42,11 @@ DELETE localhost:9998/product/7
 ### adding discount to product
 POST localhost:9998/product/7/discount/6
 Content-Type: application/json
+
+### add attribute to product
+POST localhost:9998/product/4/addattribute/1
+Content-Type: application/json
+
+{
+  "value": "1"
+}

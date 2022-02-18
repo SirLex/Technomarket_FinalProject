@@ -7,10 +7,10 @@ User
 - edit user information
 - delete user
 - subscribe / unsubscribe
-- get favorite products
-- add product to favorites
++ get favorite products
++ add product to favorites
 
-Review
+Review +
 - add review for product
 - get reviews by user id
 - get reviews by product id
@@ -20,10 +20,10 @@ Review
 Orders
 - get by id
 - get orders by user id
-- get products
-- add product
-- remove product
-- make order
++ get products
++ add product
++ remove product
+? make order
 
 Categories
 - add category (admin)
@@ -32,7 +32,6 @@ Categories
 
 SubCategories
 - get available attributes for this subcategory
-- get all subcategories related to category id
 
 Attributes
 - add (admin)
@@ -42,10 +41,10 @@ Products
 - add product (admin)
 - delete product (admin)
 - add attribute to the product (admin)
-- remove attribute from the product (admin)
++ remove attribute from the product (admin)
 - get product by id
-- get all products with filters for attributes/brands/price/discount/subcategories combined
-- get product images
++ get all products with filters for attributes/brands/price/discount/subcategories combined
++ get product images
 
 Discounts
 - add discount(admin)

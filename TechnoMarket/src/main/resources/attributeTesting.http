@@ -22,3 +22,11 @@ Content-Type: application/json
 {
   "name": "CPU"
 }
+
+### add attribute
+POST localhost:9998/attribute
+Content-Type: application/json
+
+{
+  "name": "Camera"
+}
