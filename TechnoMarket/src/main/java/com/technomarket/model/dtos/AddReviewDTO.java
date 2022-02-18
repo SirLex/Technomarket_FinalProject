@@ -1,11 +1,9 @@
 package com.technomarket.model.dtos;
 
+import com.technomarket.model.pojos.Review;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +17,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddReviewDTO {
 
-    @NotBlank
-    private String title;
 
     @NotNull
     private String alias;
@@ -34,4 +30,12 @@ public class AddReviewDTO {
     @Max(5)
     private int rating;
 
+    @NotNull
+    private boolean isRecommended;
+
+    public AddReviewDTO(Review review) {
+
+        this.comment = review.getComment();
+        this.rating = review.getRating();
+    }
 }
