@@ -4,6 +4,7 @@ import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
 import com.technomarket.model.dtos.order.OrderDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
+import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
 import com.technomarket.model.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,12 @@ public class OrderController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/order")
-    public OrderCreateDTO test() {
-        OrderCreateDTO dto = new OrderCreateDTO();
-        List<ProductWithQuantityDTO> a = new ArrayList<>();
-        a.add(new ProductWithQuantityDTO());
-        a.add(new ProductWithQuantityDTO());
-        dto.setListOfProductsIdAndQuantity(a);
-        return dto;
+    @GetMapping("/order/{id}/products")
+    public ResponseEntity<List<ProductResponseDTO>> getProducts(@PathVariable int id, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        int userId = (int) request.getSession().getAttribute(UserController.USER_ID);
+        List<ProductResponseDTO> response = orderService.getProducts(id, userId);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/order/{id}")

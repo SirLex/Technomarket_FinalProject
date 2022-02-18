@@ -48,7 +48,7 @@ public class ProductController {
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/product/{productId}/addattribute/{attId}")
+    @PostMapping("/product/{productId}/attribute/{attId}")
     public ResponseEntity<ProductResponseDTO> addAttributeToProduct(@RequestBody AttributeAddValueToProductDTO dto, @PathVariable int productId, @PathVariable int attId, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
@@ -56,6 +56,17 @@ public class ProductController {
         userService.adminValidation(userId);
 
         ProductResponseDTO response = productService.addAttributeToProduct(dto,productId,attId);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/product/{productId}/attribute/{attId}")
+    public ResponseEntity<MessageDTO> deleteAttributeFromProduct(@PathVariable int productId, @PathVariable int attId, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        userService.adminValidation(userId);
+
+        MessageDTO response = productService.deleteAttributeFromProduct(productId,attId);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 

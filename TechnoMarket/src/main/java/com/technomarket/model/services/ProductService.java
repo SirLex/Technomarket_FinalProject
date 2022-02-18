@@ -126,4 +126,20 @@ public class ProductService {
         return new ProductResponseDTO(product);
     }
 
+    public MessageDTO deleteAttributeFromProduct(int productId, int attId) {
+
+        ProductAttributeKey key = new ProductAttributeKey();
+
+        key.setAttributeId(attId);
+        key.setProductId(productId);
+
+        if(!productAttributeRepository.existsById(key)){
+            throw new BadRequestException("Product with this id doens't have this attribute");
+        }
+
+        ProductAttribute toDelete = productAttributeRepository.getById(key);
+        productAttributeRepository.delete(toDelete);
+
+        return new MessageDTO("Attribute removed from product", LocalDateTime.now());
+    }
 }
