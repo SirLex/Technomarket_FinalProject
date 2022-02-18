@@ -82,6 +82,7 @@ public class UserController {
         UserResponseDTO responseDTO = userService.edit(userID, dto);
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
+/*
 
     @SneakyThrows
     @GetMapping("/users/favourites")
@@ -92,6 +93,7 @@ public class UserController {
         return userService.getFavouriteProducts(userID);
     }
 
+*/
     @PutMapping("/user/info/changepassword")
     public ResponseEntity<UserResponseDTO> changePassword(@Valid @RequestBody UserChangePasswordDTO dto, HttpServletRequest request) {
         validateLogin(request);

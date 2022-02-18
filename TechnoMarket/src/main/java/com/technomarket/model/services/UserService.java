@@ -172,6 +172,7 @@ public class UserService {
         });
         return user.isAdmin();
     }
+/*
 
     public List<OrderDTO> getAllUserOrders(User user) {
 
@@ -188,6 +189,8 @@ public class UserService {
         return orderDtoList;
     }
 
+*/
+/*
 
     public List<ProductResponseDTO> getFavouriteProducts(int userId) {
 
@@ -203,17 +206,6 @@ public class UserService {
         return productDto;
     }
 
-    @Transactional
-    public ProductResponseDTO addFavouriteProduct(int productId, User user) {
-
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("No such Product"));
-
-        List<Product> products = productRepository.findUserFavouriteProducts(user.getId());
-        if (products.contains(product)) {
-            throw new BadRequestException("Product is already added to favourites!");
-        }
-        //TODO
-        return null;
-    }
-
+*/
+ 
 }

@@ -1,11 +1,13 @@
 package com.technomarket.model.pojos;
 
+import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +15,7 @@ import java.util.Set;
 @Table(name = "products")
 @Getter
 @Setter
-@NoArgsConstructor
+
 public class Product {
 
     @Id
@@ -36,10 +38,16 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @OneToMany(mappedBy="product")
+    @OneToMany(mappedBy = "product")
     Set<ProductAttribute> productAttribute;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "productList")
-    private List<User> userList ;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "productList")
+    private List<User> userList;
 
+    @OneToMany(mappedBy = "product")
+    private Set<OrderProduct> orderProducts;
+
+    public Product() {
+        this.orderProducts = new HashSet<>();
+    }
 }

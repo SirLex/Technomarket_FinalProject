@@ -1,0 +1,43 @@
+### login
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "ivan@abv.bg",
+  "password": "123456Az"
+
+}
+
+### order some phones
+POST localhost:9998/order
+Content-Type: application/json
+
+{
+  "listOfProductsIdAndQuantity": [
+    {
+      "productId": 4,
+      "quantity": 2
+    }
+  ]
+}
+
+### order some phones more complex
+POST localhost:9998/order
+Content-Type: application/json
+
+{
+  "listOfProductsIdAndQuantity": [
+    {
+      "productId": 4,
+      "quantity": 1
+    },
+    {
+      "productId": 5,
+      "quantity": 1
+    }
+  ]
+}
+
+###test
+GET localhost:9998/order
+Content-Type: application/json
