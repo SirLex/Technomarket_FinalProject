@@ -6,6 +6,7 @@ import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.model.compositekeys.OrderProductKey;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
+import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
@@ -16,6 +17,7 @@ import com.technomarket.model.repositories.OrderProductRepository;
 import com.technomarket.model.repositories.OrderRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.UserRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class OrderService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Order getById(int id, int userId) {
+    public OrderResponseDTO getById(int id, int userId) {
         if (!orderRepository.existsById(id)) {
             throw new BadRequestException("Order with this id doesn't exist");
         }
@@ -51,7 +53,7 @@ public class OrderService {
         if (userId != order.getUser().getId() && !user.isAdmin()) {
             throw new AuthorizationException("You dont have the rights to view this");
         }
-        return orderRepository.getById(id);
+        return new OrderResponseDTO(orderRepository.getById(id));
     }
 
 

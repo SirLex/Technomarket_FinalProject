@@ -1,11 +1,14 @@
 package com.technomarket.model.dtos.order;
 import com.sun.istack.NotNull;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
+import com.technomarket.model.dtos.user.UserResponseDTO;
 import com.technomarket.model.pojos.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,22 +17,26 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
+public class OrderResponseDTO {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @NotNull
     private int id;
     @NotNull
-    private double totalPrice;
-  //  private List<ProductResponseDTO> productList;
+    private UserResponseDTO user;
     @NotNull
-    private LocalDate date;
+    private double totalPrice;
+    @NotNull
+    private LocalDate createDate;
 
-    public OrderDTO(Order order){
+    public OrderResponseDTO(Order order){
 
         this.id= order.getId();
+        this.user = modelMapper.map(order.getUser(),UserResponseDTO.class);
         this.totalPrice= order.getPrice();
-        //this.productList=order.getProductList();
-        this.date=order.getCreatedAt();
+        this.createDate=order.getCreatedAt();
 
 
 

@@ -2,7 +2,7 @@ package com.technomarket.controller;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.*;
-import com.technomarket.model.dtos.order.OrderDTO;
+import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
 import com.technomarket.model.services.UserService;
@@ -115,12 +115,12 @@ public class UserController {
 
 
     @GetMapping("/user/orders")
-    public ResponseEntity<List<OrderDTO>> getOrders(HttpServletRequest request) {
+    public ResponseEntity<List<OrderResponseDTO>> getOrders(HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
 
-        List<OrderDTO> orderDTOList = userService.getAllOrdersFromUser(userId);
+        List<OrderResponseDTO> orderDTOList = userService.getAllOrdersFromUser(userId);
         return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
     }
 

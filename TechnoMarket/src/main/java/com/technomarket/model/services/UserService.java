@@ -3,7 +3,7 @@ package com.technomarket.model.services;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.*;
-import com.technomarket.model.dtos.order.OrderDTO;
+import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
 import com.technomarket.model.pojos.Order;
@@ -200,14 +200,14 @@ public class UserService {
         return mapper.map(user, UserResponseDTO.class);
     }
 
-    public List<OrderDTO> getAllOrdersFromUser(int userId) {
+    public List<OrderResponseDTO> getAllOrdersFromUser(int userId) {
         List<Order> orders = orderRepository.findAllByUser_Id(userId);
         if (orders.isEmpty()) {
             throw new NotFoundException("No orders found!");
         }
-        List<OrderDTO> orderDtoList = new ArrayList<>();
+        List<OrderResponseDTO> orderDtoList = new ArrayList<>();
         for (Order order : orders) {
-            OrderDTO orderDto = new OrderDTO(order.getId(), order.getPrice(), order.getCreatedAt());
+            OrderResponseDTO orderDto = new OrderResponseDTO(order.getId(), order.getPrice(), order.getCreatedAt());
             orderDtoList.add(orderDto);
         }
         return orderDtoList;

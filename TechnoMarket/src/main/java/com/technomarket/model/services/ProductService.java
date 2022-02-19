@@ -66,11 +66,11 @@ public class ProductService {
         return new ProductResponseDTO(product);
     }
 
-    public Product getById(int id) {
+    public ProductResponseDTO getById(int id) {
         if (!productRepository.existsById(id)) {
             throw new BadRequestException("Product with this id doesn't exist");
         }
-        return productRepository.getById(id);
+        return new ProductResponseDTO(productRepository.getById(id));
     }
 
     public ProductResponseDTO addDiscountToProduct(int productId, int discountId) {
@@ -102,7 +102,7 @@ public class ProductService {
         }
         Product product = productRepository.getById(productId);
         Attributes attribute = attributeRepository.getById(attId);
-        if(!product.getSubcategory().getAllowedAttributes().stream().anyMatch(x->x.equals(attribute))){
+        if (!product.getSubcategory().getAllowedAttributes().stream().anyMatch(x -> x.equals(attribute))) {
             throw new AuthorizationException("Subcategory doesn't allow this attribute");
         }
 
@@ -133,7 +133,7 @@ public class ProductService {
         key.setAttributeId(attId);
         key.setProductId(productId);
 
-        if(!productAttributeRepository.existsById(key)){
+        if (!productAttributeRepository.existsById(key)) {
             throw new BadRequestException("Product with this id doens't have this attribute");
         }
 

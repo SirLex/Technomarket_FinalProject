@@ -2,8 +2,8 @@ package com.technomarket.controller;
 
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
+import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
-import com.technomarket.model.pojos.Order;
 import com.technomarket.model.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,11 +38,11 @@ public class OrderController {
     }
 
     @GetMapping("/order/{id}")
-    public Order getById(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<OrderResponseDTO> getById(@PathVariable int id, HttpServletRequest request) {
         UserController.validateLogin(request);
         int userId = (int) request.getSession().getAttribute(UserController.USER_ID);
-
-        return orderService.getById(id, userId);
+        OrderResponseDTO responseDTO = orderService.getById(id, userId);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 }

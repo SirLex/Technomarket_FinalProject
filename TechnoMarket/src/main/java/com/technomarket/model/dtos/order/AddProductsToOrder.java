@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AddProductsToOrder {
     @NotNull
-    private OrderDTO order;
+    private OrderResponseDTO order;
     @NotNull
     private List<ProductResponseDTO> products;
 }
