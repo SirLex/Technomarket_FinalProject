@@ -19,6 +19,7 @@ Review
 - delete review by id
 
 Orders
+- create order
 - get by id
 - get products
 

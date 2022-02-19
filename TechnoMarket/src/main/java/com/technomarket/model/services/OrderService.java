@@ -6,7 +6,6 @@ import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.model.compositekeys.OrderProductKey;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
-import com.technomarket.model.dtos.order.OrderDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
@@ -43,9 +42,14 @@ public class OrderService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Order getById(int id) {
+    public Order getById(int id, int userId) {
         if (!orderRepository.existsById(id)) {
             throw new BadRequestException("Order with this id doesn't exist");
+        }
+        Order order = orderRepository.getById(id);
+        User user = userRepository.getById(userId);
+        if (userId != order.getUser().getId() && !user.isAdmin()) {
+            throw new AuthorizationException("You dont have the rights to view this");
         }
         return orderRepository.getById(id);
     }
@@ -56,7 +60,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new BadRequestException("Not valid user");
         }
-        Map<Product, Integer> products = getProductIntegerMap(dto);
+        Map<Product, Integer> products = getProductsWithQuantityForOrder(dto);
 
         if (products.isEmpty()) {
             throw new BadRequestException("Cannot order when you have a empty cart");
@@ -76,28 +80,32 @@ public class OrderService {
         orderRepository.save(order);
 
         for (Map.Entry<Product, Integer> entry : products.entrySet()) {
-            Product product = entry.getKey();
-            int quantity = entry.getValue();
-
-            OrderProductKey key = new OrderProductKey();
-            key.setOrderId(order.getId());
-            key.setProductId(product.getId());
-
-            OrderProduct orderProduct = new OrderProduct();
-            orderProduct.setId(key);
-            orderProduct.setOrder(order);
-            orderProduct.setProduct(product);
-            orderProduct.setQuantity(quantity);
-
-            order.getOrderProducts().add(orderProduct);
-            product.getOrderProducts().add(orderProduct);
-
-            orderProductRepository.save(orderProduct);
+            saveOrderProductRelation(order, entry);
         }
         orderRepository.save(order);
         user.getOrderList().add(order);
         userRepository.save(user);
         return new MessageDTO("Order created", LocalDateTime.now());
+    }
+
+    private void saveOrderProductRelation(Order order, Map.Entry<Product, Integer> entry) {
+        Product product = entry.getKey();
+        int quantity = entry.getValue();
+
+        OrderProductKey key = new OrderProductKey();
+        key.setOrderId(order.getId());
+        key.setProductId(product.getId());
+
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setId(key);
+        orderProduct.setOrder(order);
+        orderProduct.setProduct(product);
+        orderProduct.setQuantity(quantity);
+
+        order.getOrderProducts().add(orderProduct);
+        product.getOrderProducts().add(orderProduct);
+
+        orderProductRepository.save(orderProduct);
     }
 
     private double getTotalPrice(Map<Product, Integer> products) {
@@ -115,7 +123,7 @@ public class OrderService {
         return totalPrice;
     }
 
-    private Map<Product, Integer> getProductIntegerMap(OrderCreateDTO dto) {
+    private Map<Product, Integer> getProductsWithQuantityForOrder(OrderCreateDTO dto) {
         Map<Product, Integer> products = new HashMap<>();
         for (ProductWithQuantityDTO miniDTO : dto.getListOfProductsIdAndQuantity()) {
             int id = miniDTO.getProductId();
@@ -132,10 +140,14 @@ public class OrderService {
     }
 
     public List<ProductResponseDTO> getProducts(int orderId, int userId) {
-        User user = userRepository.getById(userId);
+
+        if (!orderRepository.existsById(orderId)) {
+            throw new BadRequestException("Order with this id doesn't exist");
+        }
         Order order = orderRepository.getById(orderId);
-        if (order.getUser().getId() != userId || user.isAdmin()) {
-            throw new AuthorizationException("You dont have rights to look at this");
+        User user = userRepository.getById(userId);
+        if (userId != order.getUser().getId() && !user.isAdmin()) {
+            throw new AuthorizationException("You dont have the rights to view this");
         }
 
         List<Product> products = productRepository.findAllProductsInOrder(orderId);
