@@ -8,7 +8,7 @@ User
 - delete user
 - subscribe / unsubscribe
 - get orders
-+ get favorite products
+- get favorite products
 - add product to favorites
 
 Review +

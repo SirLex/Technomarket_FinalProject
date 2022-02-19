@@ -180,15 +180,12 @@ public class UserService {
         return user.isAdmin();
     }
 
-/*
-
     public List<ProductResponseDTO> getFavouriteProducts(int userId) {
         if(!userRepository.existsById(userId)){
             throw new BadRequestException("No such user exists");
         }
 
-        List<Product> products = userRepository.findAllByIdOrderByFavoriteProducts(userId);
-        //List<Product> products = productRepository.findUserFavouriteProducts(userId);
+        List<Product> products = productRepository.findUserFavouriteProducts(userId);
         if (products.isEmpty()) {
             throw new NotFoundException("No favourite products found!");
         }
@@ -200,7 +197,7 @@ public class UserService {
         return productDto;
     }
 
-*/
+
     public UserResponseDTO addFavourite(int productId, int userID) {
         if(!productRepository.existsById(productId)){
             throw new BadRequestException("Product with this id doesn't exist");
@@ -225,6 +222,5 @@ public class UserService {
         }
         return orderDtoList;
     }
-
 
 }
