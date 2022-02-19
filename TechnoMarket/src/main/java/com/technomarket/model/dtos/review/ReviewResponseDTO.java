@@ -1,4 +1,4 @@
-package com.technomarket.model.dtos;
+package com.technomarket.model.dtos.review;
 
 
 import com.technomarket.model.dtos.product.ProductResponseDTO;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class GetProductReviewDTO {
+public class ReviewResponseDTO {
     @NotNull
     private int id;
     @NotNull
@@ -31,7 +31,7 @@ public class GetProductReviewDTO {
     @NotNull
     private LocalDateTime date;
 
-    public GetProductReviewDTO(Review review) {
+    public ReviewResponseDTO(Review review) {
         setId(review.getId());
         setAlias(review.getAlias());
         setProduct(new ProductResponseDTO(review.getProduct()));

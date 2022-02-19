@@ -3,14 +3,12 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
-import com.technomarket.model.dtos.AddReviewDTO;
-import com.technomarket.model.dtos.GetProductReviewDTO;
+import com.technomarket.model.dtos.review.AddReviewDTO;
+import com.technomarket.model.dtos.review.ReviewResponseDTO;
 import com.technomarket.model.dtos.MessageDTO;
-import com.technomarket.model.dtos.subcategory.SubcategoryResponseDTO;
 import com.technomarket.model.pojos.Product;
 
 import com.technomarket.model.pojos.Review;
-import com.technomarket.model.pojos.Subcategory;
 import com.technomarket.model.pojos.User;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.ReviewRepository;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Service
@@ -39,7 +36,7 @@ public class ReviewService  {
 
 
     @SneakyThrows
-    public GetProductReviewDTO addReviewToProduct(int productId, AddReviewDTO addReviewDto, int userId){
+    public ReviewResponseDTO addReviewToProduct(int productId, AddReviewDTO addReviewDto, int userId){
 
         if (!productRepository.existsById(productId)) {
             throw new NotFoundException("Product not found to add review");
@@ -56,15 +53,15 @@ public class ReviewService  {
         review.setRecommended(addReviewDto.isRecommended());
         review.setDate(LocalDateTime.now());
         reviewRepository.save(review);
-        return new GetProductReviewDTO(review);
+        return new ReviewResponseDTO(review);
 
     }
 
-    public GetProductReviewDTO getById(int id) {
+    public ReviewResponseDTO getById(int id) {
         if (!reviewRepository.existsById(id)) {
             throw new BadRequestException("Review with this id doesn't exists");
         }
-        return new GetProductReviewDTO(reviewRepository.getById(id));
+        return new ReviewResponseDTO(reviewRepository.getById(id));
     }
 
 

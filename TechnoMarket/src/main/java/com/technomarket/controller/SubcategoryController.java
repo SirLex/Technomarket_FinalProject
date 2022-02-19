@@ -1,13 +1,9 @@
 package com.technomarket.controller;
 
-import com.technomarket.exceptions.AuthorizationException;
-import com.technomarket.model.dtos.category.CategoryAddDTO;
 import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryAddDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryResponseDTO;
-import com.technomarket.model.pojos.Category;
 import com.technomarket.model.pojos.Subcategory;
-import com.technomarket.model.services.CategoryService;
 import com.technomarket.model.services.SubcategoryService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,14 +58,9 @@ public class SubcategoryController {
     }
 
     @GetMapping("/subcategory/all")
-    public ResponseEntity<List<SubcategoryResponseDTO>> getAllSubcategories() {
-        List<Subcategory> subcategories = subcategoryService.getAllSubcategories();
-
-        List<SubcategoryResponseDTO> responseSubcategoryDTOList = new ArrayList<>();
-        for (Subcategory sc : subcategories) {
-            responseSubcategoryDTOList.add(new SubcategoryResponseDTO(sc));
-        }
-        return new ResponseEntity<>(responseSubcategoryDTOList,HttpStatus.OK);
+    public ResponseEntity<List<CategoryResponseDTO>> getAllSubcategories() {
+        List<CategoryResponseDTO> responseDTO = subcategoryService.getAllCategoriesWithSubCategories();
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 }
 

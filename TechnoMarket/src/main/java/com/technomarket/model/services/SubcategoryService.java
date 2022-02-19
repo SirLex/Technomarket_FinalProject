@@ -1,9 +1,11 @@
 package com.technomarket.model.services;
 
 import com.technomarket.exceptions.BadRequestException;
+import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryAddDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryResponseDTO;
 import com.technomarket.model.pojos.Subcategory;
+import com.technomarket.model.repositories.CategoryRepository;
 import com.technomarket.model.repositories.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class SubcategoryService {
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private CategoryService categoryService;
@@ -39,9 +44,6 @@ public class SubcategoryService {
         }
         return new SubcategoryResponseDTO(subcategoryRepository.getById(id));
     }
-    public List<Subcategory> getAllSubcategories() {
-        return subcategoryRepository.findAll();
-    }
 
     public Subcategory getWholeById(int id) {
         if (!subcategoryRepository.existsById(id)) {
@@ -55,5 +57,9 @@ public class SubcategoryService {
         subcategory.getAllowedAttributes().add(attributeService.getById(attId));
         subcategoryRepository.save(subcategory);
         return new SubcategoryResponseDTO(subcategory);
+    }
+
+    public List<CategoryResponseDTO> getAllCategoriesWithSubCategories() {
+        return categoryRepository.findAll().stream().map(cat -> new CategoryResponseDTO(cat)).toList();
     }
 }

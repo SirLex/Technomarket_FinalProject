@@ -24,7 +24,7 @@ public class CategoryResponseDTO {
     @NotBlank
     private String name;
 
-    List<SubcategoryResponseWithoutCategoryDTO> subcategories;
+    private List<SubcategoryResponseWithoutCategoryDTO> subcategories;
 
     public CategoryResponseDTO(Category category){
         this.id = category.getId();

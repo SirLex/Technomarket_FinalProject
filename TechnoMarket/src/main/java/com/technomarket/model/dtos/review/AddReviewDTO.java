@@ -1,4 +1,4 @@
-package com.technomarket.model.dtos;
+package com.technomarket.model.dtos.review;
 
 import com.technomarket.model.pojos.Review;
 import org.hibernate.validator.constraints.Length;

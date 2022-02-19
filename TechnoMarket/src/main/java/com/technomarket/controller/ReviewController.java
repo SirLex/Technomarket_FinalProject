@@ -1,9 +1,9 @@
 package com.technomarket.controller;
 
 
-import com.technomarket.model.dtos.AddReviewDTO;
+import com.technomarket.model.dtos.review.AddReviewDTO;
 
-import com.technomarket.model.dtos.GetProductReviewDTO;
+import com.technomarket.model.dtos.review.ReviewResponseDTO;
 import com.technomarket.model.services.ReviewService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class ReviewController {
 
     @SneakyThrows
     @PostMapping("/products/{productId}/review")
-    public ResponseEntity<GetProductReviewDTO> addReviewToProduct (@Valid @RequestBody AddReviewDTO addReviewDTO, HttpServletRequest request, @PathVariable int productId)
+    public ResponseEntity<ReviewResponseDTO> addReviewToProduct (@Valid @RequestBody AddReviewDTO addReviewDTO, HttpServletRequest request, @PathVariable int productId)
     {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
-        GetProductReviewDTO reviewResponseDTO = reviewService.addReviewToProduct(productId,addReviewDTO,userId);
+        ReviewResponseDTO reviewResponseDTO = reviewService.addReviewToProduct(productId,addReviewDTO,userId);
         return new ResponseEntity<>(reviewResponseDTO, HttpStatus.CREATED);
     }
 }
