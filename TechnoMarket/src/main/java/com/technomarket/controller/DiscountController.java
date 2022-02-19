@@ -26,13 +26,13 @@ public class DiscountController {
 
 
     @PostMapping("/discount")
-    public ResponseEntity<Discount> addDiscount(@Valid @RequestBody DiscountAddDTO dto, HttpServletRequest request) {
+    public ResponseEntity<DiscountResponseDTO> addDiscount(@Valid @RequestBody DiscountAddDTO dto, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
 
-        Discount response = discountService.addDiscount(dto);
+        DiscountResponseDTO response = discountService.addDiscount(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

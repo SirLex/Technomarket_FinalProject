@@ -16,7 +16,7 @@ public class DiscountService {
     private DiscountRepository discountRepository;
 
     @Transactional
-    public Discount addDiscount(DiscountAddDTO dto) {
+    public DiscountResponseDTO addDiscount(DiscountAddDTO dto) {
         if (discountRepository.existsByTitle(dto.getTitle())) {
             throw new BadRequestException("Discount with this title already exists");
         }
@@ -26,7 +26,7 @@ public class DiscountService {
         discount.setStartAt(dto.getStartAt());
         discount.setEndAt(dto.getEndAt());
         discountRepository.save(discount);
-        return discount;
+        return new DiscountResponseDTO(discount);
     }
 
     public Discount getWholeDiscountById(int id) {

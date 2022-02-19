@@ -26,12 +26,14 @@ public class CategoryResponseDTO {
 
     private List<SubcategoryResponseWithoutCategoryDTO> subcategories;
 
-    public CategoryResponseDTO(Category category){
+    public CategoryResponseDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.subcategories = new ArrayList<>();
-        for (Subcategory subcategory : category.getSubcategories()) {
-            subcategories.add(new SubcategoryResponseWithoutCategoryDTO(subcategory));
+        if (category.getSubcategories() != null) {
+            for (Subcategory subcategory : category.getSubcategories()) {
+                subcategories.add(new SubcategoryResponseWithoutCategoryDTO(subcategory));
+            }
         }
     }
 

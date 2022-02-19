@@ -6,3 +6,17 @@ Content-Type: application/json
   "email": "alex4o@abv.bg",
   "password": "asd4!ASDa"
 }
+
+### login
+POST localhost:9998/user/login
+Content-Type: application/json
+
+{
+  "email": "ivan@abv.bg",
+  "password": "123456Az"
+
+}
+
+### logout
+POST localhost:9998/user/logout
+Content-Type: application/json

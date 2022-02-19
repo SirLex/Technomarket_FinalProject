@@ -21,3 +21,14 @@ Content-Type: application/json
 {
   "name": "Camera"
 }
+
+### add attribute
+POST localhost:9998/attribute
+Content-Type: application/json
+
+{
+  "name": "TouchPad"
+}
+
+### get attribute by id
+GET localhost:9998/attribute/1
