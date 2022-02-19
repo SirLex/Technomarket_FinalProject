@@ -11,7 +11,7 @@ User
 - get favorite products
 - add product to favorites
 
-Review +
+Review
 - add review for product
 - get reviews by user id
 - get reviews by product id
@@ -41,7 +41,8 @@ Products
 - remove attribute from the product (admin)
 - get product by id
 + get all products with filters for attributes/brands/price/discount/subcategories combined
-+ get product images
++ add product image
++ get product image
 
 Discounts
 - add discount(admin)

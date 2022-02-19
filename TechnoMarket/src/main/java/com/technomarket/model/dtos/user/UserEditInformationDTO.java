@@ -3,9 +3,7 @@ package com.technomarket.model.dtos.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Getter
@@ -19,8 +17,7 @@ public class UserEditInformationDTO {
     @NotBlank(message = "Name is mandatory!")
     private String lastName;
 
-
-    @NotBlank(message = "Password is mandatory!")
+    @NotBlank(message = "Address is mandatory!")
     private String address;
 
     @NotBlank(message = "Password is mandatory!")

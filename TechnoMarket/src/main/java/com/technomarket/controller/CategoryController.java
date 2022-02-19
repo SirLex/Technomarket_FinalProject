@@ -38,6 +38,7 @@ public class CategoryController {
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.adminValidation(userId);
+
         CategoryResponseDTO responseDTO = categoryService.addCategory(categoryDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }

@@ -142,9 +142,7 @@ public class UserService {
     }
 
     public MessageDTO deleteUser(int userId, PasswordRequestDTO dto) {
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("User with this id doesnt exist");
-        }
+
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException("User not found");
         });
@@ -164,9 +162,6 @@ public class UserService {
     }
 
     private boolean checkAdminRights(int userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("User with this id doesnt exist");
-        }
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException("User not found");
         });
@@ -174,7 +169,7 @@ public class UserService {
     }
 
     public List<ProductResponseDTO> getFavouriteProducts(int userId) {
-        if(!userRepository.existsById(userId)){
+        if (!userRepository.existsById(userId)) {
             throw new BadRequestException("No such user exists");
         }
 
@@ -191,16 +186,18 @@ public class UserService {
     }
 
 
-    public UserResponseDTO addFavourite(int productId, int userID) {
-        if(!productRepository.existsById(productId)){
+    public UserResponseDTO addFavourite(int productId, int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        if (!productRepository.existsById(productId)) {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         Product product = productRepository.getById(productId);
-        User user = userRepository.getById(userID);
         user.getFavoriteProducts().add(product);
         userRepository.save(user);
 
-        return mapper.map(user,UserResponseDTO.class);
+        return mapper.map(user, UserResponseDTO.class);
     }
 
     public List<OrderDTO> getAllOrdersFromUser(int userId) {
@@ -210,7 +207,7 @@ public class UserService {
         }
         List<OrderDTO> orderDtoList = new ArrayList<>();
         for (Order order : orders) {
-            OrderDTO orderDto = new OrderDTO(order.getId(),order.getPrice(),order.getCreatedAt());
+            OrderDTO orderDto = new OrderDTO(order.getId(), order.getPrice(), order.getCreatedAt());
             orderDtoList.add(orderDto);
         }
         return orderDtoList;

@@ -5,15 +5,12 @@ import com.technomarket.model.dtos.*;
 import com.technomarket.model.dtos.order.OrderDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
-import com.technomarket.model.pojos.User;
 import com.technomarket.model.services.UserService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,7 +41,8 @@ public class UserController {
     }
 
     @PostMapping("/user/registration")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto, HttpServletRequest request) {
+        validateNotLoggedIn(request);
         UserResponseDTO returnDto = userService.registerUser(dto);
         return new ResponseEntity<>(returnDto, HttpStatus.ACCEPTED);
     }
@@ -53,8 +51,11 @@ public class UserController {
     public ResponseEntity<MessageDTO> logout(HttpServletRequest request) {
         validateLogin(request);
         HttpSession session = request.getSession();
-        session.invalidate();
-        return new ResponseEntity<>(new MessageDTO("You have been loged out.", LocalDateTime.now()), HttpStatus.ACCEPTED);
+
+        if (session != null) {
+            session.invalidate();
+        }
+        return new ResponseEntity<>(new MessageDTO("You have been logged out.", LocalDateTime.now()), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/user")
@@ -62,6 +63,7 @@ public class UserController {
         validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
+
         MessageDTO responseDTO = userService.deleteUser(userId, dto);
         session.invalidate();
         return responseDTO;
@@ -81,14 +83,23 @@ public class UserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
+    @PutMapping("/user/info/changepassword")
+    public ResponseEntity<UserResponseDTO> changePassword(@Valid @RequestBody UserChangePasswordDTO dto, HttpServletRequest request) {
+        validateLogin(request);
+        HttpSession session = request.getSession();
+        int userID = (int) session.getAttribute(USER_ID);
+        UserResponseDTO responseDTO = userService.changePassword(userID, dto);
+        return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
+    }
+
     @PostMapping("/user/favourites/{id}")
-    public ResponseEntity<UserResponseDTO> addFavouriteProduct(@PathVariable int id, HttpServletRequest request){
+    public ResponseEntity<UserResponseDTO> addFavouriteProduct(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
         HttpSession session = request.getSession();
         int userID = (int) session.getAttribute(USER_ID);
 
-        UserResponseDTO responseDTOS = userService.addFavourite(id,userID);
-        return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
+        UserResponseDTO responseDTOS = userService.addFavourite(id, userID);
+        return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
     }
 
 
@@ -99,7 +110,7 @@ public class UserController {
         int userID = (int) session.getAttribute(USER_ID);
 
         List<ProductResponseDTO> responseDTOS = userService.getFavouriteProducts(userID);
-        return new ResponseEntity<>(responseDTOS,HttpStatus.OK);
+        return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
     }
 
 
@@ -113,20 +124,19 @@ public class UserController {
         return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
     }
 
-    @PutMapping("/user/info/changepassword")
-    public ResponseEntity<UserResponseDTO> changePassword(@Valid @RequestBody UserChangePasswordDTO dto, HttpServletRequest request) {
-        validateLogin(request);
-        HttpSession session = request.getSession();
-        int userID = (int) session.getAttribute(USER_ID);
-        UserResponseDTO responseDTO = userService.changePassword(userID, dto);
-        return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
-    }
-
     public static void validateLogin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         boolean notLogged = (session.getAttribute(LOGGED) == null) || (!(Boolean) session.getAttribute(LOGGED));
         boolean notSameAddress = (session.getAttribute(LOGGED_FROM) == null) || !request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM));
         if (session.isNew() || notLogged || notSameAddress) {
+            throw new AuthorizationException("You have to login!");
+        }
+    }
+
+    public static void validateNotLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        boolean logged = (session.getAttribute(LOGGED) != null) || ((Boolean) session.getAttribute(LOGGED));
+        if (logged) {
             throw new AuthorizationException("You have to login!");
         }
     }
