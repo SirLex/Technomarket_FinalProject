@@ -135,9 +135,9 @@ public class UserController {
 
     public static void validateNotLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        boolean logged = (session.getAttribute(LOGGED) != null) || ((Boolean) session.getAttribute(LOGGED));
+        boolean logged = (session.getAttribute(LOGGED) != null) && ((Boolean) session.getAttribute(LOGGED));
         if (logged) {
-            throw new AuthorizationException("You have to login!");
+            throw new AuthorizationException("You have to logout!");
         }
     }
 

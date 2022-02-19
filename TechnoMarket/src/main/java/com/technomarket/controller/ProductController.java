@@ -8,14 +8,21 @@ import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.services.ProductService;
 import com.technomarket.model.services.UserService;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 public class ProductController {
@@ -55,7 +62,7 @@ public class ProductController {
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
 
-        ProductResponseDTO response = productService.addAttributeToProduct(dto,productId,attId);
+        ProductResponseDTO response = productService.addAttributeToProduct(dto, productId, attId);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
@@ -66,7 +73,7 @@ public class ProductController {
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
 
-        MessageDTO response = productService.deleteAttributeFromProduct(productId,attId);
+        MessageDTO response = productService.deleteAttributeFromProduct(productId, attId);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
@@ -79,6 +86,16 @@ public class ProductController {
 
         MessageDTO response = productService.deleteProduct(id);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/product/{productId}/uploadImage")
+    public ResponseEntity<MessageDTO> uploadImage(@RequestParam(name = "file") MultipartFile file, HttpServletRequest request, @PathVariable int productId) throws IOException {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        userService.adminValidation(userId);
+        MessageDTO messageDTO = productService.uploadImageToProduct(file, productId);
+        return new ResponseEntity<>(messageDTO, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/product/{id}")

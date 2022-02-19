@@ -46,6 +46,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<OrderProduct> orderProducts;
 
+    @OneToMany(mappedBy = "product")
+    private Set<ProductImage> images;
+
     public Product() {
         this.orderProducts = new HashSet<>();
     }

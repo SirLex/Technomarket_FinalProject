@@ -1,16 +1,5 @@
-###
-POST localhost:9998/user/login
-Content-Type: application/json
-
-{
-  "email": "alex4o@abv.bg",
-  "password": "asd4!ASDa"
-
-}
-
-###
-
-POST localhost:9998/products/4/review
+### add review
+POST localhost:9998/product/4/review
 Content-Type: application/json
 
 {
@@ -23,8 +12,8 @@ Content-Type: application/json
 }
 
 
-###
-POST localhost:9998/products/4/review
+### add review
+POST localhost:9998/product/4/review
 Content-Type: application/json
 
 {
@@ -35,3 +24,11 @@ Content-Type: application/json
   "isRecommended": false
 
 }
+
+### get reviews of product
+GET localhost:9998/product/4/reviews
+Content-Type: application/json
+
+### get reviews by user
+GET localhost:9998/user/reviews
+Content-Type: application/json

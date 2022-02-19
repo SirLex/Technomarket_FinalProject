@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -75,6 +77,34 @@ public class ReviewService  {
     }
 
 
+    public List<ReviewResponseDTO> getReviewsForProduct(int productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new NotFoundException("Product not found to add review");
+        }
 
+        Product product = productRepository.getById(productId);
+        List<Review> reviews = reviewRepository.findAllByProduct(product);
 
+        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
+        for (Review review : reviews) {
+            responseDTOS.add(new ReviewResponseDTO(review));
+        }
+
+        return responseDTOS;
+    }
+
+    public List<ReviewResponseDTO> getReviewsForUser(int userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("Product not found to add review");
+        }
+
+        User user = userRepository.getById(userId);
+        List<Review> reviews = reviewRepository.findAllByUser(user);
+        List<ReviewResponseDTO> responseDTOS = new ArrayList<>();
+        for (Review review : reviews) {
+            responseDTOS.add(new ReviewResponseDTO(review));
+        }
+
+        return responseDTOS;
+    }
 }

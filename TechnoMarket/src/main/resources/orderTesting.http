@@ -1,18 +1,4 @@
-### login
-POST localhost:9998/user/login
-Content-Type: application/json
-
-{
-  "email": "ivan@abv.bg",
-  "password": "123456Az"
-
-}
-
-### get all orders for user
-GET localhost:9998/user/orders
-Content-Type: application/json
-
-### order some phones
+### create order with some phones
 POST localhost:9998/order
 Content-Type: application/json
 
@@ -45,3 +31,8 @@ Content-Type: application/json
 ### get products in order by id
 GET localhost:9998/order/13/products
 Content-Type: application/json
+
+### get order by id
+GET localhost:9998/order/14
+Content-Type: application/json
+

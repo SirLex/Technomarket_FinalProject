@@ -1,14 +1,3 @@
-### login into admin profile
-POST localhost:9998/user/login
-Content-Type: application/json
-
-{
-  "email": "alex4o@abv.bg",
-  "password": "asd4!ASDa"
-
-}
-
-
 ### adding product
 POST localhost:9998/product
 Content-Type: application/json
@@ -36,21 +25,25 @@ Content-Type: application/json
 }
 
 ### delete product
-DELETE localhost:9998/product/7
+DELETE localhost:9998/product/8
+Content-Type: application/json
 
+### get product by id
+GET localhost:9998/product/8
+Content-Type: application/json
 
 ### adding discount to product
 POST localhost:9998/product/7/discount/6
 Content-Type: application/json
 
 ### add attribute to product
-POST localhost:9998/product/4/attribute/1
+POST localhost:9998/product/7/attribute/1
 Content-Type: application/json
 
 {
   "value": "1"
 }
 
-### remvoe attribute from product
+### remove attribute from product
 DELETE localhost:9998/product/4/attribute/1
 Content-Type: application/json

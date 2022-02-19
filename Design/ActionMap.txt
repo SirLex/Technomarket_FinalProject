@@ -15,8 +15,6 @@ Review
 - add review for product
 - get reviews by user id
 - get reviews by product id
-- edit review by id
-- delete review by id
 
 Orders
 - create order

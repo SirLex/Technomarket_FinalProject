@@ -19,9 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponseDTO {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @NotNull
     private int id;
     @NotNull
@@ -34,7 +31,7 @@ public class OrderResponseDTO {
     public OrderResponseDTO(Order order){
 
         this.id= order.getId();
-        this.user = modelMapper.map(order.getUser(),UserResponseDTO.class);
+        this.user = new UserResponseDTO(order.getUser());
         this.totalPrice= order.getPrice();
         this.createDate=order.getCreatedAt();
 

@@ -3,22 +3,34 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
+import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.compositekeys.ProductAttributeKey;
 import com.technomarket.model.dtos.MessageDTO;
+import com.technomarket.model.dtos.ProductImageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
+import com.technomarket.model.pojos.ProductImage;
 import com.technomarket.model.relationentity.ProductAttribute;
 import com.technomarket.model.repositories.AttributeRepository;
 import com.technomarket.model.repositories.ProductAttributeRepository;
+import com.technomarket.model.repositories.ProductImageRepository;
 import com.technomarket.model.repositories.ProductRepository;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+
 
 @Service
 public class ProductService {
@@ -32,6 +44,8 @@ public class ProductService {
     @Autowired
     private SubcategoryService subcategoryService;
 
+    @Autowired
+    private ProductImageRepository productImageRepository;
     @Autowired
     private ProductAttributeRepository productAttributeRepository;
 
@@ -137,5 +151,34 @@ public class ProductService {
         productAttributeRepository.delete(toDelete);
 
         return new MessageDTO("Attribute removed from product", LocalDateTime.now());
+    }
+
+    @SneakyThrows
+    public MessageDTO uploadImageToProduct(MultipartFile file, int productId) {
+
+        String name = String.valueOf(System.nanoTime());
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        File f = new File("uploads" + File.separator + name + "." + extension);
+        Files.copy(file.getInputStream(), Path.of(f.toURI()), StandardCopyOption.REPLACE_EXISTING);
+
+        if (!productRepository.existsById(productId)) {
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+
+        Product product =productRepository.getById(productId);
+
+        ProductImage productImage = new ProductImage();
+        productImage.setUrl(f.getName());
+        productImage.setProduct(product);
+        productImageRepository.save(productImage);
+        return new MessageDTO("Image was uploaded", LocalDateTime.now());
+    }
+
+    public ProductImageDTO getImageById(int id) {
+
+        if (!productImageRepository.existsById(id)) {
+            throw new NotFoundException("Product image not found");
+        }
+        return new ProductImageDTO(productImageRepository.getById(id));
     }
 }
