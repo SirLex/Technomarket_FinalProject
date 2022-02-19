@@ -3,7 +3,6 @@ package com.technomarket.model.services;
 
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
-import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.compositekeys.ProductAttributeKey;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
@@ -15,10 +14,7 @@ import com.technomarket.model.relationentity.ProductAttribute;
 import com.technomarket.model.repositories.AttributeRepository;
 import com.technomarket.model.repositories.ProductAttributeRepository;
 import com.technomarket.model.repositories.ProductRepository;
-import com.technomarket.model.repositories.ReviewRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -2,6 +2,7 @@ package com.technomarket.controller;
 
 
 import com.technomarket.model.dtos.attribute.AttributeAddDTO;
+import com.technomarket.model.dtos.attribute.AttributeResponseDTO;
 import com.technomarket.model.dtos.category.CategoryAddDTO;
 import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.dtos.user.UserResponseDTO;
@@ -34,18 +35,18 @@ public class AttributeController {
     private UserService userService;
 
     @PostMapping("/attribute")
-    public ResponseEntity<Attributes> createAttribute(@Valid @RequestBody AttributeAddDTO attributeDTO, HttpServletRequest request) {
+    public ResponseEntity<AttributeResponseDTO> createAttribute(@Valid @RequestBody AttributeAddDTO attributeDTO, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.adminValidation(userId);
-        Attributes response = attributeService.addAttribute(attributeDTO);
+        AttributeResponseDTO response = attributeService.addAttribute(attributeDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/attribute/{id}")
-    public ResponseEntity<Attributes> getAttributeById(@PathVariable int id) {
-        Attributes response = attributeService.getById(id);
+    public ResponseEntity<AttributeResponseDTO> getAttributeById(@PathVariable int id) {
+        AttributeResponseDTO response = attributeService.getById(id);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

@@ -17,7 +17,6 @@ import com.technomarket.model.repositories.OrderProductRepository;
 import com.technomarket.model.repositories.OrderRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.UserRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

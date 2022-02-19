@@ -207,7 +207,7 @@ public class UserService {
         }
         List<OrderResponseDTO> orderDtoList = new ArrayList<>();
         for (Order order : orders) {
-            OrderResponseDTO orderDto = new OrderResponseDTO(order.getId(), order.getPrice(), order.getCreatedAt());
+            OrderResponseDTO orderDto = new OrderResponseDTO(order);
             orderDtoList.add(orderDto);
         }
         return orderDtoList;

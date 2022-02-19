@@ -54,7 +54,7 @@ public class SubcategoryService {
 
     public SubcategoryResponseDTO addAttributeToAllowed(int subId, int attId) {
         Subcategory subcategory = getWholeById(subId);
-        subcategory.getAllowedAttributes().add(attributeService.getById(attId));
+        subcategory.getAllowedAttributes().add(attributeService.getWholeById(attId));
         subcategoryRepository.save(subcategory);
         return new SubcategoryResponseDTO(subcategory);
     }
