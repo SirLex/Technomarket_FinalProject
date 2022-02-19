@@ -6,23 +6,34 @@ import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.compositekeys.ProductAttributeKey;
 import com.technomarket.model.dtos.MessageDTO;
+import com.technomarket.model.dtos.ProductImageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
+import com.technomarket.model.pojos.ProductImage;
+import com.technomarket.model.pojos.User;
 import com.technomarket.model.relationentity.ProductAttribute;
-import com.technomarket.model.repositories.AttributeRepository;
-import com.technomarket.model.repositories.ProductAttributeRepository;
-import com.technomarket.model.repositories.ProductRepository;
-import com.technomarket.model.repositories.ReviewRepository;
+import com.technomarket.model.repositories.*;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+
 
 @Service
 public class ProductService {
@@ -36,6 +47,8 @@ public class ProductService {
     @Autowired
     private SubcategoryService subcategoryService;
 
+    @Autowired
+    private ProductImageRepository productImageRepository;
     @Autowired
     private ProductAttributeRepository productAttributeRepository;
 
@@ -102,7 +115,7 @@ public class ProductService {
         }
         Product product = productRepository.getById(productId);
         Attributes attribute = attributeRepository.getById(attId);
-        if(!product.getSubcategory().getAllowedAttributes().stream().anyMatch(x->x.equals(attribute))){
+        if (!product.getSubcategory().getAllowedAttributes().stream().anyMatch(x -> x.equals(attribute))) {
             throw new AuthorizationException("Subcategory doesn't allow this attribute");
         }
 
@@ -133,7 +146,7 @@ public class ProductService {
         key.setAttributeId(attId);
         key.setProductId(productId);
 
-        if(!productAttributeRepository.existsById(key)){
+        if (!productAttributeRepository.existsById(key)) {
             throw new BadRequestException("Product with this id doens't have this attribute");
         }
 
@@ -141,5 +154,30 @@ public class ProductService {
         productAttributeRepository.delete(toDelete);
 
         return new MessageDTO("Attribute removed from product", LocalDateTime.now());
+    }
+
+    @SneakyThrows
+    public MessageDTO uploadImageToProduct(MultipartFile file, int productId) {
+
+        String name = String.valueOf(System.nanoTime());
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        File f = new File("Technomarket_FinalProject\\TechnoMarket\\uploads" + File.separator + name + "." + extension);
+        Files.copy(file.getInputStream(), Path.of(f.toURI()), StandardCopyOption.REPLACE_EXISTING);
+
+        Product product = getById(productId);
+
+        ProductImage productImage = new ProductImage();
+        productImage.setUrl(f.getName());
+        productImage.setProduct(product);
+        productImageRepository.save(productImage);
+        return new MessageDTO("Image was uploaded", LocalDateTime.now());
+    }
+
+    public ProductImageDTO getImageById(int id) {
+
+        if (!productImageRepository.existsById(id)) {
+            throw new NotFoundException("Product image not found");
+        }
+        return new ProductImageDTO(productImageRepository.getById(id));
     }
 }

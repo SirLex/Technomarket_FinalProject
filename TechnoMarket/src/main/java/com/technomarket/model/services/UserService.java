@@ -1,5 +1,6 @@
 package com.technomarket.model.services;
 
+import com.technomarket.controller.UserController;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.*;
@@ -13,12 +14,18 @@ import com.technomarket.model.repositories.OrderRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.UserRepository;
 import com.technomarket.exceptions.BadRequestException;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -218,4 +225,6 @@ public class UserService {
         }
         return orderDtoList;
     }
+
+
 }
