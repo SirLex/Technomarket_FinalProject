@@ -1,13 +1,16 @@
 package com.technomarket.model.dtos;
 
 
+import com.technomarket.model.dtos.product.ProductResponseDTO;
+import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import javax.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,19 +18,23 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class GetProductReviewDTO {
-
-    private long id;
-
-    private String title;
+    @NotNull
+    private int id;
+    @NotNull
+    private String alias;
+    @NotNull
+    private ProductResponseDTO product;
 
     private String comment;
-
+    @NotNull
     private int rating;
-
-    private LocalDate date;
+    @NotNull
+    private LocalDateTime date;
 
     public GetProductReviewDTO(Review review) {
         setId(review.getId());
+        setAlias(review.getAlias());
+        setProduct(new ProductResponseDTO(review.getProduct()));
         setComment(review.getComment());
         setRating(review.getRating());
         setDate(review.getDate());
