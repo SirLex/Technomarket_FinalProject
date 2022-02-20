@@ -22,7 +22,7 @@ POST localhost:9998/user/login
 Content-Type: application/json
 
 {
-  "email": "test@abv.bg",
+  "email": "sabod85786@submic.com",
   "password": "123Test"
 
 }
@@ -30,8 +30,6 @@ Content-Type: application/json
 ### logout
 POST localhost:9998/user/logout
 Content-Type: application/json
-
-
 
 ### product image upload
 POST localhost:9998/product/5/uploadImage

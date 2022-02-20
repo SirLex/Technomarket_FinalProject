@@ -3,6 +3,7 @@ package com.technomarket.controller;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.exceptions.VerificationException;
 import com.technomarket.model.dtos.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +40,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorDTO handleAuthorization(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.UNAUTHORIZED.value());
+        dto.setTime(LocalDateTime.now());
+        return dto;
+    }
+
+    @ExceptionHandler(VerificationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDTO handleVerification(Exception e) {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg(e.getMessage());
         dto.setStatus(HttpStatus.UNAUTHORIZED.value());

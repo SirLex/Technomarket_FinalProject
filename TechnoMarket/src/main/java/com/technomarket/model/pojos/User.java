@@ -40,6 +40,8 @@ public class User {
     private boolean isSubscribed;
     @Column
     private boolean isMale;
+    @Column
+    private boolean verified;
 
 
     @OneToMany(mappedBy = "user")
@@ -49,6 +51,4 @@ public class User {
     @JoinTable(name = "users_have_favourites",joinColumns = {@JoinColumn(name="user_id")},
             inverseJoinColumns = {@JoinColumn(name="product_id")})
     private List<Product> favoriteProducts =new ArrayList<>();
-
-
 }

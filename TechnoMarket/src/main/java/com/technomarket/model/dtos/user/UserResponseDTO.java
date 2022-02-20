@@ -28,10 +28,12 @@ public class UserResponseDTO {
     private LocalDate dateOfBirth;
     @NotBlank
     private boolean isAdmin;
-    @NotBlank
+
     private boolean isSubscribed;
-    @NotBlank
+
     private boolean isMale;
+
+    private boolean verified;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
@@ -44,5 +46,6 @@ public class UserResponseDTO {
         this.isAdmin = user.isAdmin();
         this.isSubscribed = user.isSubscribed();
         this.isMale = user.isMale();
+        this.verified = user.isVerified();
     }
 }

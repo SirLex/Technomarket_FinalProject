@@ -3,26 +3,34 @@ package com.technomarket.model.services;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
+import com.technomarket.exceptions.VerificationException;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.dtos.user.*;
+import com.technomarket.model.event.OnRegistrationCompleteEvent;
 import com.technomarket.model.pojos.Order;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.User;
+import com.technomarket.model.pojos.VerificationToken;
 import com.technomarket.model.repositories.OrderRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import com.technomarket.model.repositories.UserRepository;
+import com.technomarket.model.repositories.VerificationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class UserService {
@@ -30,33 +38,36 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
     private ProductRepository productRepository;
 
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    private VerificationRepository verificationRepo;
+
+    @Autowired
     private ModelMapper mapper;
 
-    public UserResponseDTO registerUser(UserRegisterDTO dto) {
-        String firstName = dto.getFirstName();
-        String lastName = dto.getLastName();
+    public UserResponseDTO registerUser(UserRegisterDTO dto, HttpServletRequest request) {
+        User user = plainRegister(dto);
+
+        String appUrl = request.getContextPath();
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
+        return mapper.map(user, UserResponseDTO.class);
+    }
+
+    private User plainRegister(UserRegisterDTO dto) {
         String email = dto.getEmail();
         String password = dto.getPassword();
         String confirmPassword = dto.getConfirmPassword();
-        String address = dto.getAddress();
-        String phone = dto.getPhone();
-        LocalDate dateOfBirth = dto.getDateOfBirth();
-        boolean isAdmin = false;
-        boolean isSubscribed = dto.isSubscribed();
-        boolean isMale = dto.isMale();
-
         if (userRepository.existsByEmail(email)) {
             throw new BadRequestException("User with that email already exists");
         }
@@ -66,27 +77,32 @@ public class UserService {
         }
 
         User u = new User();
-        u.setFirstName(firstName);
-        u.setLastName(lastName);
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
         u.setEmail(email);
         u.setPassword(passwordEncoder.encode(password));
-        u.setAddress(address);
-        u.setPhone(phone);
-        u.setDateOfBirth(dateOfBirth);
+        u.setAddress(dto.getAddress());
+        u.setPhone(dto.getPhone());
+        u.setDateOfBirth(dto.getDateOfBirth());
         u.setAdmin(false);
-        u.setSubscribed(isSubscribed);
-        u.setMale(isMale);
+        u.setSubscribed(dto.isSubscribed());
+        u.setMale(dto.isMale());
+        u.setVerified(false);
         userRepository.save(u);
-        return mapper.map(u, UserResponseDTO.class);
+        return u;
     }
 
-    public UserResponseDTO login(String email, String password) {
+    public UserResponseDTO login(String email, String password, HttpServletRequest request) {
         if (!userRepository.existsByEmail(email)) {
             throw new BadRequestException("No account with that email");
         }
         User u = userRepository.findByEmail(email);
         if (!passwordEncoder.matches(password, u.getPassword())) {
             throw new BadRequestException("Wrong credentials");
+        }
+        if(!u.isVerified()){
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(u, request.getLocale(), request.getContextPath()));
+            throw  new VerificationException("You have to verify your email");
         }
         return mapper.map(u, UserResponseDTO.class);
 
@@ -213,4 +229,26 @@ public class UserService {
         return orderDtoList;
     }
 
+    public void createVerificationToken(User user, String token) {
+        VerificationToken verificationToken = new VerificationToken(token,user);
+        verificationRepo.save(verificationToken);
+    }
+
+    public void confirmRegistration(HttpServletRequest request, String token) {
+        Locale locale = request.getLocale();
+
+        VerificationToken verificationToken = verificationRepo.getByToken(token);
+        if (verificationToken == null) {
+            throw new VerificationException("Token not found");
+        }
+
+        User user = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpireDate().getTime() - cal.getTime().getTime()) <= 0) {
+            throw new VerificationException("Token has expired");
+        }
+
+        user.setVerified(true);
+        userRepository.save(user);
+    }
 }

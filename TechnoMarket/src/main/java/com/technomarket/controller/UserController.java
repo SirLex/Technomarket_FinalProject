@@ -1,6 +1,7 @@
 package com.technomarket.controller;
 
 import com.technomarket.exceptions.AuthorizationException;
+import com.technomarket.exceptions.VerificationException;
 import com.technomarket.model.dtos.*;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto, HttpServletRequest request) {
-        UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword());
+        UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword(),request);
         HttpSession session = request.getSession();
         session.setAttribute(LOGGED, true);
         session.setAttribute("logged_from", request.getRemoteAddr());
@@ -43,8 +44,14 @@ public class UserController {
     @PostMapping("/user/registration")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto, HttpServletRequest request) {
         validateNotLoggedIn(request);
-        UserResponseDTO returnDto = userService.registerUser(dto);
+        UserResponseDTO returnDto = userService.registerUser(dto, request);
         return new ResponseEntity<>(returnDto, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/registration/confirm/{token}")
+    public ResponseEntity<MessageDTO> confirmRegistration(HttpServletRequest request, @PathVariable String token) {
+        userService.confirmRegistration(request, token);
+        return new ResponseEntity<>(new MessageDTO("Verified!", LocalDateTime.now()), HttpStatus.OK);
     }
 
     @PostMapping("/user/logout")
