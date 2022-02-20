@@ -4,6 +4,7 @@ package com.technomarket.controller;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
+import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.services.ProductService;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -102,6 +104,13 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> getById(@PathVariable int id) {
         ProductResponseDTO responseDTO = productService.getById(id);
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters (@RequestBody @Valid ProductFilterDTO productFilterDTO) {
+        List<ProductResponseDTO> responseDTOS=productService.searchWithFilters(productFilterDTO);
+        return new ResponseEntity<>(responseDTOS,HttpStatus.ACCEPTED);
+
     }
 
 }

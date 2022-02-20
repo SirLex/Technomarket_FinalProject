@@ -52,4 +52,8 @@ public class Product {
     public Product() {
         this.orderProducts = new HashSet<>();
     }
+
+    public boolean isOnDiscount() {
+        return discount!=null;
+    }
 }

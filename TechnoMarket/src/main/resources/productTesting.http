@@ -47,3 +47,12 @@ Content-Type: application/json
 ### remove attribute from product
 DELETE localhost:9998/product/4/attribute/1
 Content-Type: application/json
+
+
+### product search by filter
+POST localhost:9998/product/search
+Content-Type: application/json
+
+{
+  
+}

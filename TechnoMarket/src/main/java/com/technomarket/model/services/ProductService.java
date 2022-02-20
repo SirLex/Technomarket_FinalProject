@@ -8,7 +8,9 @@ import com.technomarket.model.compositekeys.ProductAttributeKey;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.ProductImageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
+import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
+import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
@@ -24,12 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.management.AttributeList;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -165,7 +169,7 @@ public class ProductService {
             throw new BadRequestException("Product with this id doesn't exist");
         }
 
-        Product product =productRepository.getById(productId);
+        Product product = productRepository.getById(productId);
 
         ProductImage productImage = new ProductImage();
         productImage.setUrl(f.getName());
@@ -180,5 +184,43 @@ public class ProductService {
             throw new NotFoundException("Product image not found");
         }
         return new ProductImageDTO(productImageRepository.getById(id));
+    }
+
+    public List<ProductResponseDTO> searchWithFilters(ProductFilterDTO dto) {
+
+        List<Product> products;
+        products = productRepository.findAll();
+        products = products.stream().filter(product -> dto.getSubcategoryId() == product.getId()).toList();
+
+        if (dto.getListOfBrands() != null && dto.getListOfBrands().size() > 0) {
+            products = products.stream().filter(product -> {
+                for (String brand : dto.getListOfBrands()) {
+                    if (product.getBrand().equals(brand)) {
+                        return true;
+                    }
+                }
+                return false;
+            }).toList();
+
+        }
+
+        products=products.stream().filter(product -> dto.getMin()<=product.getPrice()&&product.getPrice()<=dto.getMax()).toList();
+        products=products.stream().filter(product -> dto.isOnDiscount()== product.isOnDiscount()).toList();
+
+
+   /*     if (dto.getAttributeFilterDTOList() != null && dto.getAttributeFilterDTOList().size() > 0) {
+            products = products.stream().filter(product -> {
+                for (AttributeFilterDTO attribute : dto.getAttributeFilterDTOList()) {
+                    if (product.getBrand().equals(brand)) {
+                        return true;
+                    }
+                }
+                return false;
+            }).toList();
+
+        }*/
+
+        return products.stream().map(ProductResponseDTO::new).toList();
+
     }
 }

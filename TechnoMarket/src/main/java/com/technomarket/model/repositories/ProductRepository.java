@@ -15,10 +15,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     boolean existsByName(String name);
 
     @Modifying
-    @Query(value ="SELECT p.* FROM products AS p JOIN orders_have_products AS ohp ON p.id=ohp.product_id WHERE ohp.order_id = ?", nativeQuery = true)
+    @Query(value = "SELECT p.* FROM products AS p JOIN orders_have_products AS ohp ON p.id=ohp.product_id WHERE ohp.order_id = ?", nativeQuery = true)
     List<Product> findAllProductsInOrder(int id);
 
     @Modifying
-    @Query(value ="SELECT p.* FROM products AS p JOIN users_have_favourites AS uhp ON p.id=uhp.product_id WHERE uhp.user_id = ?", nativeQuery = true)
+    @Query(value = "SELECT p.* FROM products AS p JOIN users_have_favourites AS uhp ON p.id=uhp.product_id WHERE uhp.user_id = ?", nativeQuery = true)
     List<Product> findUserFavouriteProducts(int id);
+
+
 }
