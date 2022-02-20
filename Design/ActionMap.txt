@@ -39,9 +39,9 @@ Products
 - add attribute to the product (admin)
 - remove attribute from the product (admin)
 - get product by id
-+ get all products with filters for attributes/brands/price/discount/subcategories combined
-+ add product image
-+ get product image
+- get all products with filters for attributes/brands/price/discount/subcategories combined
+- add product image
+- get product image
 
 Discounts
 - add discount(admin)

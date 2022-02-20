@@ -1,5 +1,6 @@
 package com.technomarket.model.pojos;
 
+import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
@@ -54,6 +55,17 @@ public class Product {
     }
 
     public boolean isOnDiscount() {
-        return discount!=null;
+        return discount != null;
+    }
+
+    public boolean hasThisParticularAttribute(AttributeFilterDTO dto) {
+        for (ProductAttribute attribute : productAttribute) {
+            if (sameAttribute(attribute, dto)) return true;
+        }
+        return false;
+    }
+
+    private boolean sameAttribute(ProductAttribute attribute, AttributeFilterDTO dto) {
+        return attribute.getAttribute().getName().equals(dto.getName()) && attribute.getValue().equals(dto.getValue());
     }
 }

@@ -3,6 +3,7 @@ package com.technomarket.controller;
 
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
+import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -110,6 +112,23 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters (@RequestBody @Valid ProductFilterDTO productFilterDTO) {
         List<ProductResponseDTO> responseDTOS=productService.searchWithFilters(productFilterDTO);
         return new ResponseEntity<>(responseDTOS,HttpStatus.ACCEPTED);
+
+    }
+
+    @GetMapping("/pro")
+    public ProductFilterDTO  asd() {
+        ProductFilterDTO responseDTOS = new ProductFilterDTO();
+        responseDTOS.setSubcategoryId(1);
+        responseDTOS.setListOfBrands(new ArrayList<>());
+        responseDTOS.getListOfBrands().add("Samsung");
+        responseDTOS.getListOfBrands().add("Huawei");
+        responseDTOS.setMin(0);
+        responseDTOS.setMax(1000);
+        responseDTOS.setOnDiscount(false);
+        responseDTOS.setAttributeFilterDTOList(new ArrayList<>());
+        responseDTOS.getAttributeFilterDTOList().add(new AttributeFilterDTO());
+        responseDTOS.getAttributeFilterDTOList().add(new AttributeFilterDTO());
+        return responseDTOS;
 
     }
 

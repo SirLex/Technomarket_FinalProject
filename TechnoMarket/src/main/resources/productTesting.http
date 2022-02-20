@@ -49,10 +49,48 @@ DELETE localhost:9998/product/4/attribute/1
 Content-Type: application/json
 
 
+### get json
+GET localhost:9998/pro
+Content-Type: application/json
+
 ### product search by filter
 POST localhost:9998/product/search
 Content-Type: application/json
 
 {
-  
+  "subcategoryId": 1,
+  "listOfBrands": [
+    "Samsung",
+    "Huawei"
+  ],
+  "min": 0.0,
+  "max": 1000.0,
+  "onDiscount": false,
+  "attributeFilterDTOList": [
+    {
+      "name": null,
+      "value": null
+    },
+    {
+      "name": null,
+      "value": null
+    }
+  ],
+  "orderBy": null
+}
+
+### product search by filter
+GET localhost:9998/product/search
+Content-Type: application/json
+
+{
+  "subcategoryId": 1,
+  "listOfBrands": [
+  ],
+  "min": 0.0,
+  "max": 1000.0,
+  "onDiscount": false,
+  "attributeFilterDTOList": [
+  ],
+  "orderBy": "DESC"
 }

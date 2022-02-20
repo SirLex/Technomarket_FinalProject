@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -188,10 +189,14 @@ public class ProductService {
 
     public List<ProductResponseDTO> searchWithFilters(ProductFilterDTO dto) {
 
-        List<Product> products;
-        products = productRepository.findAll();
-        products = products.stream().filter(product -> dto.getSubcategoryId() == product.getId()).toList();
+        List<Product> products = productRepository.findAll().stream()
+                .filter(product -> dto.getSubcategoryId() == product.getSubcategory().getId())
+                .filter(product -> dto.getMin() <= product.getPrice() && product.getPrice() <= dto.getMax()).toList();
 
+        if (dto.isOnDiscount()) {
+            products = products.stream().filter(product -> product.isOnDiscount()).toList();
+        }
+        //Brands
         if (dto.getListOfBrands() != null && dto.getListOfBrands().size() > 0) {
             products = products.stream().filter(product -> {
                 for (String brand : dto.getListOfBrands()) {
@@ -201,24 +206,29 @@ public class ProductService {
                 }
                 return false;
             }).toList();
+        }
+        //Attributes
+        if (dto.getAttributeFilterDTOList() != null && dto.getAttributeFilterDTOList().size() > 0) {
+            products = products.stream().filter(product -> {
+                for (AttributeFilterDTO attribute : dto.getAttributeFilterDTOList()) {
+                    if (!product.hasThisParticularAttribute(attribute)) {
+                        return false;
+                    }
+                }
+                return true;
+            }).toList();
 
         }
 
-        products=products.stream().filter(product -> dto.getMin()<=product.getPrice()&&product.getPrice()<=dto.getMax()).toList();
-        products=products.stream().filter(product -> dto.isOnDiscount()== product.isOnDiscount()).toList();
+        if(dto.getOrderBy()!=null){
+            if("ASC".equals(dto.getOrderBy())){
+                products = products.stream().sorted(Comparator.comparingDouble(Product::getPrice)).toList();
+            } else if("DESC".equals(dto.getOrderBy())){
+                products = products.stream().sorted((o1, o2) -> Double.compare(o2.getPrice(),o1.getPrice())).toList();
+            }
+        }
 
 
-   /*     if (dto.getAttributeFilterDTOList() != null && dto.getAttributeFilterDTOList().size() > 0) {
-            products = products.stream().filter(product -> {
-                for (AttributeFilterDTO attribute : dto.getAttributeFilterDTOList()) {
-                    if (product.getBrand().equals(brand)) {
-                        return true;
-                    }
-                }
-                return false;
-            }).toList();
-
-        }*/
 
         return products.stream().map(ProductResponseDTO::new).toList();
 
