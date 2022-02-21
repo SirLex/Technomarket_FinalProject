@@ -68,4 +68,11 @@ public class Product {
     private boolean sameAttribute(ProductAttribute attribute, AttributeFilterDTO dto) {
         return attribute.getAttribute().getName().equals(dto.getName()) && attribute.getValue().equals(dto.getValue());
     }
+
+    public double calculatePriceDiscount() {
+        if(discount==null){
+            return price;
+        }
+        return price-(price*(discount.getDiscountPercentage()/100));
+    }
 }

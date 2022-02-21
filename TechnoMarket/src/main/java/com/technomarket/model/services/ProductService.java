@@ -11,6 +11,7 @@ import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
+import com.technomarket.model.dtos.product.ProductKeywordsDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
@@ -26,15 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.management.AttributeList;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -232,5 +231,49 @@ public class ProductService {
 
         return products.stream().map(ProductResponseDTO::new).toList();
 
+    }
+
+    public List<ProductResponseDTO> searchWithKeywords(ProductKeywordsDTO dto) {
+        if(dto.getKeywords()==null|| dto.getKeywords().isEmpty()){
+            throw new BadRequestException("Enter words to search by");
+        }
+
+        List<Product> products = productRepository.findAll();
+        Map<Product,Integer> map = new HashMap<>();
+
+        for (Product product : products) {
+            int value = calculateSimilarValue(product,dto.getKeywords());
+            if(value==0) continue;
+            map.put(product,value);
+        }
+
+        SortedSet<Map.Entry<Product,Integer>> sortedMap;
+        sortedMap = new TreeSet<>((o1, o2) -> {
+            if(o1.getValue()==o2.getValue()) return 1;
+            return o2.getValue()-o1.getValue();
+        });
+        sortedMap.addAll(map.entrySet());
+
+        List<ProductResponseDTO> response = new ArrayList<>();
+        for (Map.Entry<Product,Integer> entry : sortedMap) {
+            Product product = entry.getKey();
+            response.add(new ProductResponseDTO(product));
+        }
+        return response;
+    }
+
+    private int calculateSimilarValue(Product product, List<String> keywords) {
+        int count = 0;
+        if(keywords.stream().anyMatch(x->x.equalsIgnoreCase(product.getBrand()))){
+            count++;
+        }
+        for (String prod : product.getName().split(" ")) {
+            for (String keyword : keywords) {
+                if(prod.equalsIgnoreCase(keyword)){
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 }

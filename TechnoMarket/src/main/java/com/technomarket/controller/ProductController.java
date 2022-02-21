@@ -6,6 +6,7 @@ import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
 import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
+import com.technomarket.model.dtos.product.ProductKeywordsDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.services.ProductService;
@@ -105,30 +106,20 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public ResponseEntity<ProductResponseDTO> getById(@PathVariable int id) {
         ProductResponseDTO responseDTO = productService.getById(id);
-        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/product/search")
-    public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters (@RequestBody @Valid ProductFilterDTO productFilterDTO) {
-        List<ProductResponseDTO> responseDTOS=productService.searchWithFilters(productFilterDTO);
-        return new ResponseEntity<>(responseDTOS,HttpStatus.ACCEPTED);
+    public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters(@RequestBody @Valid ProductFilterDTO productFilterDTO) {
+        List<ProductResponseDTO> responseDTOS = productService.searchWithFilters(productFilterDTO);
+        return new ResponseEntity<>(responseDTOS, HttpStatus.ACCEPTED);
 
     }
 
-    @GetMapping("/pro")
-    public ProductFilterDTO  asd() {
-        ProductFilterDTO responseDTOS = new ProductFilterDTO();
-        responseDTOS.setSubcategoryId(1);
-        responseDTOS.setListOfBrands(new ArrayList<>());
-        responseDTOS.getListOfBrands().add("Samsung");
-        responseDTOS.getListOfBrands().add("Huawei");
-        responseDTOS.setMin(0);
-        responseDTOS.setMax(1000);
-        responseDTOS.setOnDiscount(false);
-        responseDTOS.setAttributeFilterDTOList(new ArrayList<>());
-        responseDTOS.getAttributeFilterDTOList().add(new AttributeFilterDTO());
-        responseDTOS.getAttributeFilterDTOList().add(new AttributeFilterDTO());
-        return responseDTOS;
+    @GetMapping("/product/search/keywords")
+    public ResponseEntity<List<ProductResponseDTO>> searchProductWithKeywords(@RequestBody @Valid ProductKeywordsDTO dto) {
+        List<ProductResponseDTO> responseDTOS = productService.searchWithKeywords(dto);
+        return new ResponseEntity<>(responseDTOS, HttpStatus.ACCEPTED);
 
     }
 

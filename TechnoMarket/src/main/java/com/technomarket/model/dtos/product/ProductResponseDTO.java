@@ -37,6 +37,8 @@ public class ProductResponseDTO {
     @NotNull
     private double price;
 
+    private double priceAfterDiscount;
+
     @NotBlank
     private String info;
 
@@ -48,7 +50,9 @@ public class ProductResponseDTO {
         this.brand = product.getBrand();
         this.subcategory = new SubcategoryResponseWithoutCategoryDTO(product.getSubcategory());
         this.price = product.getPrice();
+        this.priceAfterDiscount = product.calculatePriceDiscount();
         this.info = product.getInfo();
+
         if (product.getDiscount() != null) {
             this.discount = new DiscountResponseDTO(product.getDiscount());
         }

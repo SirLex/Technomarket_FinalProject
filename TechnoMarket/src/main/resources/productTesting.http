@@ -94,3 +94,16 @@ Content-Type: application/json
   ],
   "orderBy": "DESC"
 }
+
+
+### product search by keywords
+GET localhost:9998/product/search/keywords
+Content-Type: application/json
+
+{
+  "keywords": [
+    "Samsung",
+    "GalaxY",
+    "A700"
+  ]
+}
