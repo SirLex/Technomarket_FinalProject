@@ -5,6 +5,7 @@ import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -73,6 +74,6 @@ public class Product {
         if(discount==null){
             return price;
         }
-        return price-(price*(discount.getDiscountPercentage()/100));
+        return price-(price*(discount.getDiscountPercentage()/100.0));
     }
 }
