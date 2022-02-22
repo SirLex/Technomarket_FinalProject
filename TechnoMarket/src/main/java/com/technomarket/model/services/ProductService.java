@@ -173,12 +173,13 @@ public class ProductService {
 
         String name = String.valueOf(System.nanoTime());
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        File f = new File("uploads" + File.separator + name + "." + extension);
+        File f = new File("Technomarket_FinalProject\\TechnoMarket\\uploads" + File.separator + name + "." + extension);
         Files.copy(file.getInputStream(), Path.of(f.toURI()), StandardCopyOption.REPLACE_EXISTING);
 
         if (!productRepository.existsById(productId)) {
             throw new BadRequestException("Product with this id doesn't exist");
         }
+
 
         Product product = productRepository.getById(productId);
 
