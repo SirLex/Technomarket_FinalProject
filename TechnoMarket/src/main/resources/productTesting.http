@@ -33,7 +33,7 @@ GET localhost:9998/product/8
 Content-Type: application/json
 
 ### adding discount to product
-POST localhost:9998/product/7/discount/6
+POST localhost:9998/product/4/discount/6
 Content-Type: application/json
 
 ### add attribute to product

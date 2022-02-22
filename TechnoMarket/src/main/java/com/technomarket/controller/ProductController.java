@@ -56,6 +56,8 @@ public class ProductController {
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
 
+
+
         ProductResponseDTO responseDTO = productService.addDiscountToProduct(productId, discountId);
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }

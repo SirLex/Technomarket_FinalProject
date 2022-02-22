@@ -20,7 +20,7 @@ public class CronJobService {
     @Autowired
     private DiscountRepository discountRepository;
 
-    @Scheduled(cron = "0 0 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     //@Scheduled(fixedDelay = 10000)
     public void invalidateExpiredDiscounts(){
         List<Discount> discounts = discountRepository.findAll();

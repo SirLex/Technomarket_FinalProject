@@ -13,6 +13,8 @@ import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductKeywordsDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
+import com.technomarket.model.event.OnProductDiscountEvent;
+import com.technomarket.model.event.OnRegistrationCompleteEvent;
 import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.ProductImage;
@@ -24,6 +26,7 @@ import com.technomarket.model.repositories.ProductRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,6 +53,10 @@ public class ProductService {
 
     @Autowired
     private ProductImageRepository productImageRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Autowired
     private ProductAttributeRepository productAttributeRepository;
 
@@ -94,6 +101,10 @@ public class ProductService {
         Product product = productRepository.getById(productId);
         product.setDiscount(discountService.getWholeDiscountById(discountId));
         productRepository.save(product);
+
+        eventPublisher.publishEvent(new OnProductDiscountEvent(product));
+
+
         return new ProductResponseDTO(product);
     }
 

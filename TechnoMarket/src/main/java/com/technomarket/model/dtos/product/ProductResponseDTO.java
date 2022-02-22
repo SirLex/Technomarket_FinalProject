@@ -7,10 +7,7 @@ import com.technomarket.model.dtos.subcategory.SubcategoryResponseWithoutCategor
 import com.technomarket.model.pojos.Discount;
 import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.Subcategory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -19,7 +16,6 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ProductResponseDTO {
 
     @NotNull
@@ -56,5 +52,16 @@ public class ProductResponseDTO {
         if (product.getDiscount() != null) {
             this.discount = new DiscountResponseDTO(product.getDiscount());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ProductResponseDTO{" +
+                "name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                ", priceAfterDiscount=" + priceAfterDiscount +
+                ", info='" + info + '\'' +
+                '}';
     }
 }
