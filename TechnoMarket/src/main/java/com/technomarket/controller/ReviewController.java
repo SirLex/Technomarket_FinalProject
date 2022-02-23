@@ -40,7 +40,7 @@ public class ReviewController {
     }
 
     @GetMapping("/user/reviews")
-    public ResponseEntity<List<ReviewResponseDTO>> getReviewsForProduct(HttpServletRequest request) {
+    public ResponseEntity<List<ReviewResponseDTO>> getReviewsByUser(HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
