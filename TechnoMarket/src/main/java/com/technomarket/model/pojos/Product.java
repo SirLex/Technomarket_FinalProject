@@ -5,6 +5,10 @@ import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.persistence.*;
@@ -16,7 +20,9 @@ import java.util.Set;
 @Table(name = "products")
 @Getter
 @Setter
-
+@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedProductFilter", parameters = @ParamDef(name = "deleted", type = "boolean"))
+@Filter(name = "deletedProductFilter", condition = "deleted = :deleted")
 public class Product {
 
     @Id
@@ -42,7 +48,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     Set<ProductAttribute> productAttribute;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "favoriteProducts")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favoriteProducts")
     private List<User> userList;
 
     @OneToMany(mappedBy = "product")

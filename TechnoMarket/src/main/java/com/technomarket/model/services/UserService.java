@@ -94,9 +94,12 @@ public class UserService {
 
     public UserResponseDTO login(String email, String password, HttpServletRequest request) {
         if (!userRepository.existsByEmail(email)) {
-            throw new BadRequestException("No account with that email");
+            throw new BadRequestException("Wrong credentials");
         }
         User u = userRepository.findByEmail(email);
+        if(u.isDeleted()){
+            throw new BadRequestException("Wrong credentials");
+        }
         if (!passwordEncoder.matches(password, u.getPassword())) {
             throw new BadRequestException("Wrong credentials");
         }

@@ -48,11 +48,11 @@ POST localhost:9998/user/registration
 Content-Type: application/json
 
 {
-  "firstName": "Test",
-  "lastName": "Mail",
-  "email": "xxskeperxx@gmail.com",
-  "password": "123456Az",
-  "confirmPassword": "123456Az",
+  "firstName": "Alex",
+  "lastName": "Kolachev",
+  "email": "sabod85786@submic.com",
+  "password": "sabod85786@submic.com",
+  "confirmPassword": "sabod85786@submic.com",
   "address": "Plovdiv, Kapana",
   "phone": "0927889182",
   "dateOfBirth": "2001-01-01",
@@ -79,8 +79,17 @@ Content-Type: application/json
   "confirmPassword": "123456Az"
 }
 
+### delete user
+DELETE localhost:9998/user
+Content-Type: application/json
+
+{
+  "password": "sabod85786@submic.com",
+  "confirmPassword": "sabod85786@submic.com"
+}
+
 ### add product to favourites
-POST localhost:9998/user/favourites/4
+POST localhost:9998/user/favourites/11
 Content-Type: application/json
 
 ### get all favourite products

@@ -18,12 +18,12 @@ Content-Type: application/json
 {
   "listOfProductsIdAndQuantity": [
     {
-      "productId": 4,
+      "productId": 12,
       "quantity": 1
     },
     {
-      "productId": 5,
-      "quantity": 1
+      "productId": 13,
+      "quantity": 2
     }
   ]
 }

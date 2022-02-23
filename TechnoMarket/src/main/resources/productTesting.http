@@ -8,7 +8,7 @@ Content-Type: application/json
   "subcategoryId": 1,
   "price": 280,
   "info": "Very good budget phone",
-  "discountId": 1
+  "discountId": null
 }
 
 ### adding product
@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ### delete product
-DELETE localhost:9998/product/8
+DELETE localhost:9998/product/12
 Content-Type: application/json
 
 ### get product by id
@@ -33,11 +33,11 @@ GET localhost:9998/product/8
 Content-Type: application/json
 
 ### adding discount to product
-POST localhost:9998/product/4/discount/6
+POST localhost:9998/product/10/discount/6
 Content-Type: application/json
 
 ### add attribute to product
-POST localhost:9998/product/7/attribute/1
+POST localhost:9998/product/12/attribute/3
 Content-Type: application/json
 
 {
@@ -49,12 +49,8 @@ DELETE localhost:9998/product/4/attribute/1
 Content-Type: application/json
 
 
-### get json
-GET localhost:9998/pro
-Content-Type: application/json
-
 ### product search by filter
-POST localhost:9998/product/search
+GET localhost:9998/product/search
 Content-Type: application/json
 
 {
