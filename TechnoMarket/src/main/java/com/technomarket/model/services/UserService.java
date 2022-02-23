@@ -169,7 +169,8 @@ public class UserService {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new BadRequestException("Passwords miss match");
         }
-
+        user.setEmail(LocalDateTime.now().toString());
+        userRepository.save(user);
         userRepository.delete(user);
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
