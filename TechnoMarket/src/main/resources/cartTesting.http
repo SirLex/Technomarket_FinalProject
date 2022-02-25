@@ -1,0 +1,16 @@
+### add product to cart
+POST localhost:9998/cart
+Content-Type: application/json
+
+{
+  "productId": 13,
+  "quantity": 4
+}
+
+### remove product by id
+PUT localhost:9998/cart/13
+Content-Type: application/json
+
+### show cart
+GET localhost:9998/cart
+Content-Type: application/json

@@ -3,6 +3,7 @@ package com.technomarket.model.dtos.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class UserRegisterDTO {
 
     @NotBlank(message = "Name is mandatory!")

@@ -242,7 +242,6 @@ public class ProductService {
 
 
         return products.stream().map(ProductResponseDTO::new).toList();
-
     }
 
     public List<ProductResponseDTO> searchWithKeywords(ProductKeywordsDTO dto) {

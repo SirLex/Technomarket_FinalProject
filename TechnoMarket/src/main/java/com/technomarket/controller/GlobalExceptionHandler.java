@@ -67,4 +67,15 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return dto;
     }
+
+    @ExceptionHandler(value = {Exception.class})
+    @ResponseStatus(HttpStatus.OK)
+    public ErrorDTO handleException(Exception e){
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.OK.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
 }

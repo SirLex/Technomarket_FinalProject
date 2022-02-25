@@ -1,19 +1,21 @@
 package com.technomarket.controller;
 
 import com.technomarket.model.dtos.MessageDTO;
-import com.technomarket.model.dtos.order.OrderCreateDTO;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
+import com.technomarket.model.dtos.product.ProductFullWithQuantityDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@Validated
 public class OrderController {
 
     @Autowired
@@ -21,19 +23,19 @@ public class OrderController {
 
 
     @PostMapping("/order")
-    public ResponseEntity<MessageDTO> createOrderByListOfProducts(@RequestBody OrderCreateDTO dto, HttpServletRequest request) {
+    public ResponseEntity<MessageDTO> createOrderFromCart(HttpServletRequest request) {
         UserController.validateLogin(request);
         int userId = (int) request.getSession().getAttribute(UserController.USER_ID);
-        MessageDTO response = orderService.createOrder(dto, userId);
+        MessageDTO response = orderService.createOrder(request.getSession(), userId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/order/{id}/products")
-    public ResponseEntity<List<ProductResponseDTO>> getProducts(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<List<ProductFullWithQuantityDTO>> getProducts(@PathVariable int id, HttpServletRequest request) {
         UserController.validateLogin(request);
         int userId = (int) request.getSession().getAttribute(UserController.USER_ID);
 
-        List<ProductResponseDTO> response = orderService.getProducts(id, userId);
+        List<ProductFullWithQuantityDTO> response = orderService.getProducts(id, userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

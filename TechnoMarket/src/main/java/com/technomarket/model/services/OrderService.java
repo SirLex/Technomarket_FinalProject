@@ -8,6 +8,7 @@ import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderCreateDTO;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
+import com.technomarket.model.dtos.product.ProductFullWithQuantityDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Order;
 import com.technomarket.model.pojos.Product;
@@ -20,6 +21,7 @@ import com.technomarket.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,11 +59,17 @@ public class OrderService {
 
 
     @Transactional
-    public MessageDTO createOrder(OrderCreateDTO dto, int userId) {
+    public MessageDTO createOrder(HttpSession session, int userId) {
         if (!userRepository.existsById(userId)) {
             throw new BadRequestException("Not valid user");
         }
-        Map<Product, Integer> products = getProductsWithQuantityForOrder(dto);
+        if (session.getAttribute("cart") == null && ((List<ProductWithQuantityDTO>) session.getAttribute("cart")).isEmpty()) {
+            throw new BadRequestException("You cannot order empty cart");
+        }
+        List<ProductWithQuantityDTO> cart = (List<ProductWithQuantityDTO>) session.getAttribute("cart");
+        Map<Product, Integer> products = getProductsWithQuantityForOrder(cart);
+        cart.clear();
+        session.setAttribute("cart",cart);
 
         if (products.isEmpty()) {
             throw new BadRequestException("Cannot order when you have a empty cart");
@@ -71,6 +79,7 @@ public class OrderService {
 
 
         User user = userRepository.getById(userId);
+        System.out.println(user.getId());
 
         Order order = new Order();
         order.setUser(user);
@@ -124,11 +133,14 @@ public class OrderService {
         return totalPrice;
     }
 
-    private Map<Product, Integer> getProductsWithQuantityForOrder(OrderCreateDTO dto) {
+    private Map<Product, Integer> getProductsWithQuantityForOrder(List<ProductWithQuantityDTO> productsWithQuantity) {
         Map<Product, Integer> products = new HashMap<>();
-        for (ProductWithQuantityDTO miniDTO : dto.getListOfProductsIdAndQuantity()) {
+        for (ProductWithQuantityDTO miniDTO : productsWithQuantity) {
             int id = miniDTO.getProductId();
             int quantity = miniDTO.getQuantity();
+            if (quantity < 1) {
+                continue;
+            }
             if (productRepository.existsById(id)) {
                 Product product = productRepository.getById(id);
                 if (!products.containsKey(product)) {
@@ -140,7 +152,7 @@ public class OrderService {
         return products;
     }
 
-    public List<ProductResponseDTO> getProducts(int orderId, int userId) {
+    public List<ProductFullWithQuantityDTO> getProducts(int orderId, int userId) {
 
         if (!orderRepository.existsById(orderId)) {
             throw new BadRequestException("Order with this id doesn't exist");
@@ -151,11 +163,17 @@ public class OrderService {
             throw new AuthorizationException("You dont have the rights to view this");
         }
 
-        List<Product> products = productRepository.findAllProductsInOrder(orderId);
-        List<ProductResponseDTO> responseDTOS = new ArrayList<>();
-        for (Product product : products) {
-            responseDTOS.add(new ProductResponseDTO(product));
+        List<OrderProduct> productsWithQuantity = orderProductRepository.findAllByOrder_Id(orderId);
+
+        List<ProductFullWithQuantityDTO> responseDTOS = new ArrayList<>();
+
+        for (OrderProduct orderProduct : productsWithQuantity) {
+            ProductFullWithQuantityDTO toAdd = new ProductFullWithQuantityDTO();
+            toAdd.setProductInfo(new ProductResponseDTO(orderProduct.getProduct()));
+            toAdd.setQuantity(orderProduct.getQuantity());
+            responseDTOS.add(toAdd);
         }
+
         return responseDTOS;
     }
 }
