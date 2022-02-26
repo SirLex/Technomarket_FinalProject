@@ -23,8 +23,8 @@ public class ProductDiscountListener implements ApplicationListener<OnProductDis
                 SimpleMailMessage email = new SimpleMailMessage();
                 email.setTo(user.getEmail());
                 email.setSubject("Favorite product is on discount");
-                email.setText("\r\n" + new ProductResponseDTO(product).toString());
-                mailSender.send(email);
+                email.setText("\r\n" + new ProductResponseDTO(product));
+                new Thread(() -> mailSender.send(email)).start();
             }
         }
     }

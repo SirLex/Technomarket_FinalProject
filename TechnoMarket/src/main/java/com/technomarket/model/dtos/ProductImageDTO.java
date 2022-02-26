@@ -1,7 +1,6 @@
 package com.technomarket.model.dtos;
 
 
-import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -4,10 +4,8 @@ import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.pojos.Product;
-import io.swagger.models.auth.In;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -90,7 +88,7 @@ public class ProductFilterDao {
         }
 
         List<Integer> ids = new ArrayList<>();
-        System.out.println(sql.toString());
+        System.out.println(sql);
 
         PreparedStatement preparedStatement = connector.getConnection().prepareStatement(sql.toString());
 

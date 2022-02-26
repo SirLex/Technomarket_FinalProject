@@ -3,7 +3,6 @@ package com.technomarket.controller;
 import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryAddDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryResponseDTO;
-import com.technomarket.model.pojos.Subcategory;
 import com.technomarket.model.services.SubcategoryService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

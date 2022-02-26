@@ -1,7 +1,6 @@
 package com.technomarket.model.services;
 
 import com.technomarket.model.pojos.Discount;
-import com.technomarket.model.pojos.Product;
 import com.technomarket.model.repositories.DiscountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +21,10 @@ public class CronJobService {
 
     @Scheduled(cron = "0 0 * * * ?")
     //@Scheduled(fixedDelay = 10000)
-    public void invalidateExpiredDiscounts(){
+    public void invalidateExpiredDiscounts() {
         List<Discount> discounts = discountRepository.findAll();
         for (Discount discount : discounts) {
-            if(discount.getEndAt().isBefore(LocalDateTime.now())){
+            if (discount.getEndAt().isBefore(LocalDateTime.now())) {
                 discountRepository.delete(discount);
             }
         }

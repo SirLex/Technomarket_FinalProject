@@ -1,7 +1,6 @@
 package com.technomarket.model.dtos.category;
 
 import com.technomarket.model.pojos.Category;
-import com.technomarket.model.pojos.Subcategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Component
 @Setter

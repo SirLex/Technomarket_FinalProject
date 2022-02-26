@@ -1,8 +1,5 @@
 package com.technomarket.model.dtos.subcategory;
 
-import com.technomarket.model.dtos.category.CategoryResponseDTO;
-import com.technomarket.model.dtos.category.CategoryResponseWithoutSubDTO;
-import com.technomarket.model.pojos.Category;
 import com.technomarket.model.pojos.Subcategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Component
 @Setter

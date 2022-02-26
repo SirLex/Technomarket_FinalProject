@@ -2,7 +2,6 @@ package com.technomarket.model.dtos.cart;
 
 
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
-import com.technomarket.model.dtos.product.ProductResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -2,7 +2,6 @@ package com.technomarket.model.dtos.review;
 
 
 import com.technomarket.model.dtos.product.ProductResponseDTO;
-import com.technomarket.model.pojos.Product;
 import com.technomarket.model.pojos.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,16 +3,12 @@ package com.technomarket.controller;
 
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
-import com.technomarket.model.dtos.attribute.AttributeFilterDTO;
 import com.technomarket.model.dtos.product.ProductAddDTO;
 import com.technomarket.model.dtos.product.ProductFilterDTO;
 import com.technomarket.model.dtos.product.ProductKeywordsDTO;
 import com.technomarket.model.dtos.product.ProductResponseDTO;
-import com.technomarket.model.pojos.Product;
 import com.technomarket.model.services.ProductService;
 import com.technomarket.model.services.UserService;
-import lombok.SneakyThrows;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

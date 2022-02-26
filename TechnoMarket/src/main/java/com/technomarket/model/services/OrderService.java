@@ -5,7 +5,6 @@ import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.model.compositekeys.OrderProductKey;
 import com.technomarket.model.dtos.MessageDTO;
-import com.technomarket.model.dtos.order.OrderCreateDTO;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.order.ProductWithQuantityDTO;
 import com.technomarket.model.dtos.product.ProductFullWithQuantityDTO;
@@ -69,7 +68,7 @@ public class OrderService {
         List<ProductWithQuantityDTO> cart = (List<ProductWithQuantityDTO>) session.getAttribute("cart");
         Map<Product, Integer> products = getProductsWithQuantityForOrder(cart);
         cart.clear();
-        session.setAttribute("cart",cart);
+        session.setAttribute("cart", cart);
 
         if (products.isEmpty()) {
             throw new BadRequestException("Cannot order when you have a empty cart");

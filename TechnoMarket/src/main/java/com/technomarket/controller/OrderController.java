@@ -3,7 +3,6 @@ package com.technomarket.controller;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.order.OrderResponseDTO;
 import com.technomarket.model.dtos.product.ProductFullWithQuantityDTO;
-import com.technomarket.model.dtos.product.ProductResponseDTO;
 import com.technomarket.model.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

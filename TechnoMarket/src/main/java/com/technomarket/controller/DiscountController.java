@@ -2,7 +2,6 @@ package com.technomarket.controller;
 
 import com.technomarket.model.dtos.discount.DiscountAddDTO;
 import com.technomarket.model.dtos.discount.DiscountResponseDTO;
-import com.technomarket.model.pojos.Discount;
 import com.technomarket.model.services.DiscountService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

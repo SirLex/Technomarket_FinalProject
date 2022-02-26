@@ -22,4 +22,3 @@ public class AttributeFilterDTO {
     private String value;
 
 }
-// attribute only by id

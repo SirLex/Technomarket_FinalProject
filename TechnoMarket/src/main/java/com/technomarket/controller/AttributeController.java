@@ -3,14 +3,7 @@ package com.technomarket.controller;
 
 import com.technomarket.model.dtos.attribute.AttributeAddDTO;
 import com.technomarket.model.dtos.attribute.AttributeResponseDTO;
-import com.technomarket.model.dtos.category.CategoryAddDTO;
-import com.technomarket.model.dtos.category.CategoryResponseDTO;
-import com.technomarket.model.dtos.user.UserResponseDTO;
-import com.technomarket.model.pojos.Attributes;
-import com.technomarket.model.pojos.Category;
-import com.technomarket.model.repositories.AttributeRepository;
 import com.technomarket.model.services.AttributeService;
-import com.technomarket.model.services.CategoryService;
 import com.technomarket.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class AttributeController {

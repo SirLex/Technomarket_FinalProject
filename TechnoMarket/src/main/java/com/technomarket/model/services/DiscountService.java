@@ -30,14 +30,14 @@ public class DiscountService {
     }
 
     public Discount getWholeDiscountById(int id) {
-        if(!discountRepository.existsById(id)){
+        if (!discountRepository.existsById(id)) {
             throw new BadRequestException("Discount with this id doesn't exist");
         }
         return discountRepository.getById(id);
     }
 
     public DiscountResponseDTO getDiscountById(int id) {
-        if(!discountRepository.existsById(id)){
+        if (!discountRepository.existsById(id)) {
             throw new BadRequestException("Discount with this id doesn't exist");
         }
         return new DiscountResponseDTO(discountRepository.getById(id));
@@ -45,7 +45,7 @@ public class DiscountService {
 
     @Transactional
     public DiscountResponseDTO editDiscount(DiscountAddDTO dto, int id) {
-        if(!discountRepository.existsById(id)){
+        if (!discountRepository.existsById(id)) {
             throw new BadRequestException("Discount with this id doesn't exist");
         }
         Discount discount = discountRepository.getById(id);

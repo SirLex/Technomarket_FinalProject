@@ -5,11 +5,6 @@ import com.technomarket.model.relationentity.OrderProduct;
 import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.SQLDelete;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.persistence.*;
 import java.util.HashSet;

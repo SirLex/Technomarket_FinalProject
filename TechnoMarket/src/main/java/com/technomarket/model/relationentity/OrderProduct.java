@@ -2,8 +2,6 @@ package com.technomarket.model.relationentity;
 
 
 import com.technomarket.model.compositekeys.OrderProductKey;
-import com.technomarket.model.compositekeys.ProductAttributeKey;
-import com.technomarket.model.pojos.Attributes;
 import com.technomarket.model.pojos.Order;
 import com.technomarket.model.pojos.Product;
 import lombok.Getter;
