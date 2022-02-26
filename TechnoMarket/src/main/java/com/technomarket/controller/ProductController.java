@@ -115,7 +115,6 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters(@RequestBody @Valid ProductFilterDTO productFilterDTO) {
         List<ProductResponseDTO> responseDTOS = productService.searchWithFilters(productFilterDTO);
         return new ResponseEntity<>(responseDTOS, HttpStatus.ACCEPTED);
-
     }
 
     @GetMapping("/product/search/keywords")

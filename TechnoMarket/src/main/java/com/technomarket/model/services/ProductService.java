@@ -5,6 +5,7 @@ import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.compositekeys.ProductAttributeKey;
+import com.technomarket.model.dao.ProductFilterDao;
 import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.ProductImageDTO;
 import com.technomarket.model.dtos.attribute.AttributeAddValueToProductDTO;
@@ -62,6 +63,9 @@ public class ProductService {
 
     @Autowired
     private DiscountService discountService;
+
+    @Autowired
+    private ProductFilterDao productFilterDao;
 
     @Transactional
     public ProductResponseDTO addProduct(ProductAddDTO productDTO) {
@@ -199,49 +203,7 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> searchWithFilters(ProductFilterDTO dto) {
-
-        List<Product> products = productRepository.findAll().stream()
-                .filter(product -> dto.getSubcategoryId() == product.getSubcategory().getId())
-                .filter(product -> dto.getMin() <= product.getPrice() && product.getPrice() <= dto.getMax()).toList();
-
-        if (dto.isOnDiscount()) {
-            products = products.stream().filter(product -> product.isOnDiscount()).toList();
-        }
-        //Brands
-        if (dto.getListOfBrands() != null && dto.getListOfBrands().size() > 0) {
-            products = products.stream().filter(product -> {
-                for (String brand : dto.getListOfBrands()) {
-                    if (product.getBrand().equals(brand)) {
-                        return true;
-                    }
-                }
-                return false;
-            }).toList();
-        }
-        //Attributes
-        if (dto.getAttributeFilterDTOList() != null && dto.getAttributeFilterDTOList().size() > 0) {
-            products = products.stream().filter(product -> {
-                for (AttributeFilterDTO attribute : dto.getAttributeFilterDTOList()) {
-                    if (!product.hasThisParticularAttribute(attribute)) {
-                        return false;
-                    }
-                }
-                return true;
-            }).toList();
-
-        }
-
-        if(dto.getOrderBy()!=null){
-            if("ASC".equals(dto.getOrderBy())){
-                products = products.stream().sorted(Comparator.comparingDouble(Product::getPrice)).toList();
-            } else if("DESC".equals(dto.getOrderBy())){
-                products = products.stream().sorted((o1, o2) -> Double.compare(o2.getPrice(),o1.getPrice())).toList();
-            }
-        }
-
-
-
-        return products.stream().map(ProductResponseDTO::new).toList();
+        return productFilterDao.findAllByFilter(dto);
     }
 
     public List<ProductResponseDTO> searchWithKeywords(ProductKeywordsDTO dto) {

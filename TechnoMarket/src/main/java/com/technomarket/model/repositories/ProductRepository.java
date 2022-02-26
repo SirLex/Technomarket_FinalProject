@@ -23,4 +23,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findUserFavouriteProducts(int id);
 
 
+
 }

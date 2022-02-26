@@ -57,19 +57,24 @@ Content-Type: application/json
   "subcategoryId": 1,
   "listOfBrands": [
     "Samsung",
-    "Huawei"
+    "Huawei",
+    "Gosho"
   ],
   "min": 0.0,
   "max": 1000.0,
   "onDiscount": false,
   "attributeFilterDTOList": [
     {
-      "name": null,
-      "value": null
+      "name": "RAM",
+      "value": "4"
     },
     {
-      "name": null,
-      "value": null
+      "name": "Camera",
+      "value": "4"
+    },
+    {
+      "name": "CPU",
+      "value": "3"
     }
   ],
   "orderBy": null
@@ -88,7 +93,7 @@ Content-Type: application/json
   "onDiscount": false,
   "attributeFilterDTOList": [
   ],
-  "orderBy": "DESC"
+  "orderBy": "ASC"
 }
 
 
