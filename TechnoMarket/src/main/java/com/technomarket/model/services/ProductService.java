@@ -26,13 +26,17 @@ import com.technomarket.model.repositories.ProductImageRepository;
 import com.technomarket.model.repositories.ProductRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -178,7 +182,14 @@ public class ProductService {
 
         String name = String.valueOf(System.nanoTime());
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        File f = new File("Technomarket_FinalProject\\TechnoMarket\\uploads" + File.separator + name + "." + extension);
+        Tika tika = new Tika();
+        String detectedType = tika.detect(file.getInputStream());
+        System.out.println(detectedType);
+        if (!detectedType.contains("video") && !detectedType.contains("image")){
+            throw new BadRequestException("Wrong Media provided!!!");
+        }
+
+        File f = new File("uploads" + File.separator + name + "." + extension);
         Files.copy(file.getInputStream(), Path.of(f.toURI()), StandardCopyOption.REPLACE_EXISTING);
 
         if (!productRepository.existsById(productId)) {
@@ -252,5 +263,18 @@ public class ProductService {
             }
         }
         return count;
+    }
+
+    @SneakyThrows
+    public MessageDTO getImages(int productId, HttpServletResponse response) {
+        if (!productRepository.existsById(productId)) {
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+        Product product = productRepository.getById(productId);
+        for (ProductImage image :  product.getImages()) {
+            File file = new File("uploads"+File.separator+image.getUrl());
+            Files.copy(file.toPath(),response.getOutputStream());
+        }
+        return new MessageDTO("Here you go, some pictures",LocalDateTime.now());
     }
 }

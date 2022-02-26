@@ -7,11 +7,13 @@ import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.exceptions.VerificationException;
 import com.technomarket.model.dtos.ErrorDTO;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.UnexpectedTypeException;
 import java.time.LocalDateTime;
@@ -63,7 +65,29 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDTO fileSizeOverLimit(Exception e) {
+    public ErrorDTO handleFileSizeLimitExceededException(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("File size is over the limit of 25MB");
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
+    @ExceptionHandler(SizeLimitExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleSizeLimitExceededException(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("File size is over the limit of 25MB");
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleMaxUploadSizeExceededException(Exception e) {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg("File size is over the limit of 25MB");
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -104,6 +128,18 @@ public class GlobalExceptionHandler{
         e.printStackTrace();
         return dto;
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleIllegalStateException(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("IllegalState: "+e.getMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleException(Exception e) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -93,6 +94,12 @@ public class ProductController {
         int userId = (int) session.getAttribute(UserController.USER_ID);
         userService.adminValidation(userId);
         MessageDTO messageDTO = productService.uploadImageToProduct(file, productId);
+        return new ResponseEntity<>(messageDTO, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/product/{productId}/images")
+    public ResponseEntity<MessageDTO> getImages(@PathVariable int productId, HttpServletResponse response) throws IOException {
+        MessageDTO messageDTO = productService.getImages(productId,response);
         return new ResponseEntity<>(messageDTO, HttpStatus.ACCEPTED);
     }
 
