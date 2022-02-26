@@ -27,7 +27,9 @@ public class CartService {
         if (!productRepository.existsById(dto.getProductId())) {
             throw new BadRequestException("Product doesnt exist");
         }
-
+        if(productRepository.getById(dto.getProductId()).isDeleted()){
+            throw new BadRequestException("Product doesnt exist");
+        }
 
         List<ProductWithQuantityDTO> cart;
         if (session.getAttribute("cart") == null) {

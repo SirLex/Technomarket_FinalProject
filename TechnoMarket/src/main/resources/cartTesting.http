@@ -3,8 +3,8 @@ POST localhost:9998/cart
 Content-Type: application/json
 
 {
-  "productId": 13,
-  "quantity": 4
+  "productId": 14,
+  "quantity": 1
 }
 
 ### remove product by id
