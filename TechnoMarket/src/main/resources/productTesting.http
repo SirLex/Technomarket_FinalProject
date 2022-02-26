@@ -16,16 +16,16 @@ POST localhost:9998/product
 Content-Type: application/json
 
 {
-  "name": "Galaxy A70",
+  "name": "Brick",
   "brand": "Samsung",
   "subcategoryId": 1,
-  "price": 400,
+  "price": 180,
   "info": "Not bad phone",
   "discountId": 0
 }
 
 ### delete product
-DELETE localhost:9998/product/12
+DELETE localhost:9998/product/14
 Content-Type: application/json
 
 ### get product by id

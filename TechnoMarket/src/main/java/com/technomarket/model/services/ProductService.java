@@ -117,7 +117,8 @@ public class ProductService {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         Product product = productRepository.getById(id);
-        productRepository.delete(product);
+        product.setDeleted(true);
+        productRepository.save(product);
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 

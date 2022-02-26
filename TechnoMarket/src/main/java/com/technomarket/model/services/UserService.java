@@ -170,8 +170,8 @@ public class UserService {
             throw new BadRequestException("Passwords miss match");
         }
         user.setEmail(LocalDateTime.now().toString());
+        user.setDeleted(true);
         userRepository.save(user);
-        userRepository.delete(user);
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 

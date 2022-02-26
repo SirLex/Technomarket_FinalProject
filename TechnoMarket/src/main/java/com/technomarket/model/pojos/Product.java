@@ -20,9 +20,6 @@ import java.util.Set;
 @Table(name = "products")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id=?")
-@FilterDef(name = "deletedProductFilter", parameters = @ParamDef(name = "deleted", type = "boolean"))
-@Filter(name = "deletedProductFilter", condition = "deleted = :deleted")
 public class Product {
 
     @Id
@@ -44,6 +41,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
+
+    @Column
+    private boolean deleted;
 
     @OneToMany(mappedBy = "product")
     Set<ProductAttribute> productAttribute;

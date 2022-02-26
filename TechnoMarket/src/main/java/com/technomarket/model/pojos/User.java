@@ -20,9 +20,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=?")
-@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "deleted", type = "boolean"))
-@Filter(name = "deletedUserFilter", condition = "deleted = :deleted")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
