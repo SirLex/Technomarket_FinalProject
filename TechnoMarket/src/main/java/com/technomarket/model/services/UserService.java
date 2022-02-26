@@ -133,6 +133,7 @@ public class UserService {
         user.setAddress(dto.getAddress());
         user.setDateOfBirth(dto.getDateOfBirth());
         user.setMale(dto.isMale());
+        user.setSubscribed(dto.isSubscribed());
         userRepository.save(user);
         return mapper.map(user, UserResponseDTO.class);
     }
@@ -175,10 +176,11 @@ public class UserService {
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
 
-    public void adminValidation(int userId) {
+    public boolean adminValidation(int userId) {
         if (!checkAdminRights(userId)) {
             throw new AuthorizationException("You dont have the rights for this operation");
         }
+        return true;
     }
 
     private boolean checkAdminRights(int userId) {
@@ -212,6 +214,9 @@ public class UserService {
         });
         if (!productRepository.existsById(productId)) {
             throw new BadRequestException("Product with this id doesn't exist");
+        }
+        if(user.getFavoriteProducts().stream().anyMatch(favorite->favorite.getId()==productId)){
+            throw new BadRequestException("Product already in favorites");
         }
         Product product = productRepository.getById(productId);
         user.getFavoriteProducts().add(product);
@@ -254,5 +259,24 @@ public class UserService {
 
         user.setVerified(true);
         userRepository.save(user);
+    }
+
+    public UserResponseDTO removeFavourite(int productId, int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        if(user.getFavoriteProducts().stream().noneMatch(favorite->favorite.getId()==productId)){
+            throw new BadRequestException("Product is not in favorites");
+        }
+
+        if (!productRepository.existsById(productId)) {
+            throw new BadRequestException("Product with this id doesn't exist");
+        }
+
+        Product product = productRepository.getById(productId);
+        user.getFavoriteProducts().remove(product);
+        userRepository.save(user);
+
+        return mapper.map(user, UserResponseDTO.class);
     }
 }

@@ -44,3 +44,6 @@ Content-Type: application/json
 
 ### get discount by id
 GET localhost:9998/discount/1
+
+### get all discounts
+GET localhost:9998/discounts

@@ -1,5 +1,6 @@
 package com.technomarket.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.UnexpectedTypeException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -81,6 +83,27 @@ public class GlobalExceptionHandler{
         return dto;
     }
 
+    @ExceptionHandler(UnexpectedTypeException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDTO handleUnexpectedType(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("Unexpected data. "+e.getMessage());
+        dto.setStatus(HttpStatus.UNAUTHORIZED.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
+    @ExceptionHandler(JsonParseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleJsonException(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("Problem with parsing json. "+e.getMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleException(Exception e) {

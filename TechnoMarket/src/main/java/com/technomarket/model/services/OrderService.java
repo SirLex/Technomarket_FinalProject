@@ -62,7 +62,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new BadRequestException("Not valid user");
         }
-        if (session.getAttribute("cart") == null && ((List<ProductWithQuantityDTO>) session.getAttribute("cart")).isEmpty()) {
+        if (session.getAttribute("cart") == null || ((List<ProductWithQuantityDTO>) session.getAttribute("cart")).isEmpty()) {
             throw new BadRequestException("You cannot order empty cart");
         }
         List<ProductWithQuantityDTO> cart = (List<ProductWithQuantityDTO>) session.getAttribute("cart");

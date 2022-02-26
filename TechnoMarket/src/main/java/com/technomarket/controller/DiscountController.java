@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Validated
@@ -49,6 +50,12 @@ public class DiscountController {
     @GetMapping("/discount/{id}")
     public ResponseEntity<DiscountResponseDTO> getDiscountById(@PathVariable int id) {
         DiscountResponseDTO response = discountService.getDiscountById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/discounts")
+    public ResponseEntity<List<DiscountResponseDTO>> getAllDiscount() {
+        List<DiscountResponseDTO> response = discountService.getAllDiscount();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

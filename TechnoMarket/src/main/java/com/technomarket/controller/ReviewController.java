@@ -1,6 +1,7 @@
 package com.technomarket.controller;
 
 
+import com.technomarket.model.dtos.MessageDTO;
 import com.technomarket.model.dtos.review.AddReviewDTO;
 
 import com.technomarket.model.dtos.review.ReviewResponseDTO;
@@ -30,6 +31,15 @@ public class ReviewController {
         int userId = (int) session.getAttribute(UserController.USER_ID);
         ReviewResponseDTO reviewResponseDTO = reviewService.addReviewToProduct(productId, addReviewDTO, userId);
         return new ResponseEntity<>(reviewResponseDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/review/{id}")
+    public ResponseEntity<MessageDTO> deleteReview(@PathVariable int id, HttpServletRequest request) {
+        UserController.validateLogin(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        MessageDTO response = reviewService.deleteReview(id, userId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/product/{productId}/reviews")

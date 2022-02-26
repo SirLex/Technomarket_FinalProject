@@ -1,6 +1,7 @@
 package com.technomarket.model.services;
 
 
+import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.exceptions.BadRequestException;
 import com.technomarket.exceptions.NotFoundException;
 import com.technomarket.model.dtos.review.AddReviewDTO;
@@ -67,11 +68,16 @@ public class ReviewService  {
     }
 
 
-    public MessageDTO deleteReview(int id) {
+    public MessageDTO deleteReview(int id,int userId) {
         if (!reviewRepository.existsById(id)) {
             throw new BadRequestException("Review with this id doesn't exist");
         }
+
         Review review = reviewRepository.getById(id);
+        User user = userRepository.getById(userId);
+        if(review.getUser().getId()!=userId && !user.isAdmin()){
+            throw new AuthorizationException("You dont have the rights for this operation");
+        }
         reviewRepository.delete(review);
         return new MessageDTO("Delete successful", LocalDateTime.now());
     }
@@ -79,7 +85,7 @@ public class ReviewService  {
 
     public List<ReviewResponseDTO> getReviewsForProduct(int productId) {
         if (!productRepository.existsById(productId)) {
-            throw new NotFoundException("Product not found to add review");
+            throw new NotFoundException("Product not found to get reviews");
         }
 
         Product product = productRepository.getById(productId);

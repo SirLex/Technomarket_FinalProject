@@ -30,6 +30,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto, HttpServletRequest request) {
+        validateNotLoggedIn(request);
         UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword(), request);
         HttpSession session = request.getSession();
         session.setAttribute(LOGGED, true);
@@ -74,7 +75,12 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id) {
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpSession session) {
+        int userId = (int) session.getAttribute(UserController.USER_ID);
+        if (userId != id && !userService.adminValidation(userId)) {
+            throw new AuthorizationException("You dont have the rights for this operation");
+        }
+
         return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
     }
 
@@ -97,13 +103,23 @@ public class UserController {
     }
 
     @PostMapping("/user/favourites/{id}")
-    public ResponseEntity<UserResponseDTO> addFavouriteProduct(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<MessageDTO> addFavouriteProduct(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
         HttpSession session = request.getSession();
         int userID = (int) session.getAttribute(USER_ID);
 
         UserResponseDTO responseDTOS = userService.addFavourite(id, userID);
-        return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Product was added to favourites",LocalDateTime.now()), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/favourites/{id}")
+    public ResponseEntity<MessageDTO> removeFavouriteProduct(@PathVariable int id, HttpServletRequest request) {
+        validateLogin(request);
+        HttpSession session = request.getSession();
+        int userID = (int) session.getAttribute(USER_ID);
+
+        UserResponseDTO responseDTOS = userService.removeFavourite(id, userID);
+        return new ResponseEntity<>(new MessageDTO("Product was removed from favourites",LocalDateTime.now()), HttpStatus.OK);
     }
 
 
@@ -144,6 +160,5 @@ public class UserController {
             throw new AuthorizationException("You have to logout!");
         }
     }
-
 
 }

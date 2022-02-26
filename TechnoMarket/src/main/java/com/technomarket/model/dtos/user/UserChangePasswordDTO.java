@@ -13,14 +13,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserChangePasswordDTO {
     @NotBlank(message = "Old password is mandatory!")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\\\S+$).{8,20}$")
     private String password;
 
     @NotBlank(message = "New password is mandatory!")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\\\S+$).{8,20}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$", message = "Password doesnt match pattern")
     private String newPassword;
 
     @NotBlank(message = "Confirming new password is mandatory")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\\\S+$).{8,20}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$", message = "Password doesnt match pattern")
     private String confirmNewPassword;
 }

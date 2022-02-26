@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
+    List<Review> findAllByProduct_Id(int id);
     List<Review> findAllByProduct(Product product);
     List<Review> findAllByUser(User user);
 }

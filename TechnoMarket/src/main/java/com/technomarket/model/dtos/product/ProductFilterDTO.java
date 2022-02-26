@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -36,7 +37,8 @@ public class ProductFilterDTO {
 
     private boolean onDiscount;
 
-    List<AttributeFilterDTO> attributeFilterDTOList;
+
+    List<@Valid AttributeFilterDTO> attributeFilterDTOList;
 
     private String orderBy;
 }

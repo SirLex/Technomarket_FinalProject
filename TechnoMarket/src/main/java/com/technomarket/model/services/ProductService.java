@@ -204,32 +204,35 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> searchWithFilters(ProductFilterDTO dto) {
+        if (dto.getMin() > dto.getMax()) {
+            throw new BadRequestException("Minimum price cannot be more than maximum");
+        }
         return productFilterDao.findAllByFilter(dto);
     }
 
     public List<ProductResponseDTO> searchWithKeywords(ProductKeywordsDTO dto) {
-        if(dto.getKeywords()==null|| dto.getKeywords().isEmpty()){
+        if (dto.getKeywords() == null || dto.getKeywords().isEmpty()) {
             throw new BadRequestException("Enter words to search by");
         }
 
         List<Product> products = productRepository.findAll();
-        Map<Product,Integer> map = new HashMap<>();
+        Map<Product, Integer> map = new HashMap<>();
 
         for (Product product : products) {
-            int value = calculateSimilarValue(product,dto.getKeywords());
-            if(value==0) continue;
-            map.put(product,value);
+            int value = calculateSimilarValue(product, dto.getKeywords());
+            if (value == 0) continue;
+            map.put(product, value);
         }
 
-        SortedSet<Map.Entry<Product,Integer>> sortedMap;
+        SortedSet<Map.Entry<Product, Integer>> sortedMap;
         sortedMap = new TreeSet<>((o1, o2) -> {
-            if(o1.getValue()==o2.getValue()) return 1;
-            return o2.getValue()-o1.getValue();
+            if (o1.getValue() == o2.getValue()) return 1;
+            return o2.getValue() - o1.getValue();
         });
         sortedMap.addAll(map.entrySet());
 
         List<ProductResponseDTO> response = new ArrayList<>();
-        for (Map.Entry<Product,Integer> entry : sortedMap) {
+        for (Map.Entry<Product, Integer> entry : sortedMap) {
             Product product = entry.getKey();
             response.add(new ProductResponseDTO(product));
         }
@@ -238,12 +241,12 @@ public class ProductService {
 
     private int calculateSimilarValue(Product product, List<String> keywords) {
         int count = 0;
-        if(keywords.stream().anyMatch(x->x.equalsIgnoreCase(product.getBrand()))){
+        if (keywords.stream().anyMatch(x -> x.equalsIgnoreCase(product.getBrand()))) {
             count++;
         }
         for (String prod : product.getName().split(" ")) {
             for (String keyword : keywords) {
-                if(prod.equalsIgnoreCase(keyword)){
+                if (prod.equalsIgnoreCase(keyword)) {
                     count++;
                 }
             }

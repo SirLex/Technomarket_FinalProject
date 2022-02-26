@@ -25,7 +25,7 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/cart/{productId}")
+    @DeleteMapping("/cart/{productId}")
     public ResponseEntity<MessageDTO> removeProductFromCart(@PathVariable int productId, HttpSession session) {
         MessageDTO response = cartService.removeProductFromCart(productId, session);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);

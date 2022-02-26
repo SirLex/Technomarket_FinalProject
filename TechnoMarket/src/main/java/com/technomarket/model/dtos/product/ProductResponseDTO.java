@@ -2,12 +2,16 @@ package com.technomarket.model.dtos.product;
 
 
 import com.sun.istack.NotNull;
+import com.technomarket.model.dtos.attribute.AttributeWithValueDTO;
 import com.technomarket.model.dtos.discount.DiscountResponseDTO;
 import com.technomarket.model.dtos.subcategory.SubcategoryResponseWithoutCategoryDTO;
 import com.technomarket.model.pojos.Product;
+import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +41,8 @@ public class ProductResponseDTO {
 
     private DiscountResponseDTO discount;
 
+    private List<AttributeWithValueDTO> attributes;
+
     public ProductResponseDTO(Product product) {
         this.id = product.getId();
         this.name = product.getName();
@@ -48,6 +54,11 @@ public class ProductResponseDTO {
 
         if (product.getDiscount() != null) {
             this.discount = new DiscountResponseDTO(product.getDiscount());
+        }
+
+        this.attributes = new ArrayList<>();
+        for (ProductAttribute productAttribute : product.getProductAttribute()) {
+            attributes.add(new AttributeWithValueDTO(productAttribute));
         }
     }
 

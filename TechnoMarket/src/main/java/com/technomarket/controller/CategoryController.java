@@ -1,6 +1,5 @@
 package com.technomarket.controller;
 
-import com.technomarket.exceptions.AuthorizationException;
 import com.technomarket.model.dtos.category.CategoryAddDTO;
 import com.technomarket.model.dtos.category.CategoryResponseDTO;
 import com.technomarket.model.pojos.Category;

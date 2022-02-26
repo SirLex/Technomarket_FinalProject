@@ -1,6 +1,6 @@
 package com.technomarket.model.dtos.attribute;
 
-
+import com.technomarket.model.relationentity.ProductAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,13 +13,16 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Getter
 @NoArgsConstructor
+public class AttributeWithValueDTO {
 
-public class AttributeFilterDTO {
+    @NotBlank
+    private String name;
 
-    @NotNull(message = "Attribute Filter must not be null")
-    private int id;
-
-    @NotBlank(message = "Attribute Filter must not be blank")
+    @NotBlank
     private String value;
 
+    public AttributeWithValueDTO(ProductAttribute a) {
+        this.name = a.getAttribute().getName();
+        this.value = a.getValue();
+    }
 }
