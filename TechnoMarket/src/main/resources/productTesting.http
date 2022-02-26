@@ -65,16 +65,12 @@ Content-Type: application/json
   "onDiscount": false,
   "attributeFilterDTOList": [
     {
-      "name": "RAM",
+      "id": 1,
       "value": "4"
     },
     {
-      "name": "Camera",
+      "id": 3,
       "value": "4"
-    },
-    {
-      "name": "CPU",
-      "value": "3"
     }
   ],
   "orderBy": null

@@ -31,8 +31,8 @@ public class UserController {
 
 
     @PostMapping("/user/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid UserLoginDTO dto, HttpServletRequest request) {
-        UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword(),request);
+    public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO dto, HttpServletRequest request) {
+        UserResponseDTO userResponseDTO = userService.login(dto.getEmail(), dto.getPassword(), request);
         HttpSession session = request.getSession();
         session.setAttribute(LOGGED, true);
         session.setAttribute("logged_from", request.getRemoteAddr());
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/user/registration")
-    public ResponseEntity<UserResponseDTO> register( @RequestBody @Valid  UserRegisterDTO dto, HttpServletRequest request) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO dto, HttpServletRequest request) {
         validateNotLoggedIn(request);
         UserResponseDTO returnDto = userService.registerUser(dto, request);
         return new ResponseEntity<>(returnDto, HttpStatus.ACCEPTED);

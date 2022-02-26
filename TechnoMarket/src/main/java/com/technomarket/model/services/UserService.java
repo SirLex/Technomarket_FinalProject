@@ -56,6 +56,7 @@ public class UserService {
     @Autowired
     private ModelMapper mapper;
 
+    @Transactional
     public UserResponseDTO registerUser(UserRegisterDTO dto, HttpServletRequest request) {
         User user = plainRegister(dto);
 

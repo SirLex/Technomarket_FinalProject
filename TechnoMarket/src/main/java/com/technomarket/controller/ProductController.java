@@ -57,13 +57,12 @@ public class ProductController {
         userService.adminValidation(userId);
 
 
-
         ProductResponseDTO responseDTO = productService.addDiscountToProduct(productId, discountId);
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/product/{productId}/attribute/{attId}")
-    public ResponseEntity<ProductResponseDTO> addAttributeToProduct(@RequestBody AttributeAddValueToProductDTO dto, @PathVariable int productId, @PathVariable int attId, HttpServletRequest request) {
+    public ResponseEntity<ProductResponseDTO> addAttributeToProduct(@Valid @RequestBody AttributeAddValueToProductDTO dto, @PathVariable int productId, @PathVariable int attId, HttpServletRequest request) {
         UserController.validateLogin(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
@@ -112,13 +111,13 @@ public class ProductController {
     }
 
     @GetMapping("/product/search")
-    public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters(@RequestBody @Valid ProductFilterDTO productFilterDTO) {
+    public ResponseEntity<List<ProductResponseDTO>> searchProductWithFilters(@Valid @RequestBody ProductFilterDTO productFilterDTO) {
         List<ProductResponseDTO> responseDTOS = productService.searchWithFilters(productFilterDTO);
         return new ResponseEntity<>(responseDTOS, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/product/search/keywords")
-    public ResponseEntity<List<ProductResponseDTO>> searchProductWithKeywords(@RequestBody @Valid ProductKeywordsDTO dto) {
+    public ResponseEntity<List<ProductResponseDTO>> searchProductWithKeywords(@Valid @RequestBody ProductKeywordsDTO dto) {
         List<ProductResponseDTO> responseDTOS = productService.searchWithKeywords(dto);
         return new ResponseEntity<>(responseDTOS, HttpStatus.ACCEPTED);
 

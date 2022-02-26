@@ -54,7 +54,7 @@ public class ProductFilterDao {
         if (filter.getAttributeFilterDTOList() != null && !filter.getAttributeFilterDTOList().isEmpty()) {
             int i = 1;
             for (AttributeFilterDTO attributeFilterDTO : filter.getAttributeFilterDTOList()) {
-                String name = '\'' + attributeFilterDTO.getName() + '\'';
+                int id = attributeFilterDTO.getId();
                 String value = '\'' + attributeFilterDTO.getValue() + '\'';
                 String as = "f" + i;
                 i++;
@@ -62,7 +62,7 @@ public class ProductFilterDao {
                         "SELECT pha.product_id AS id FROM products_have_attributes AS pha\n" +
                         "JOIN attributes AS a\n" +
                         "ON pha.attribute_id=a.id\n");
-                sql.append("WHERE a.name=" + name + " AND pha.value=" + value);
+                sql.append("WHERE a.id=" + id + " AND pha.value=" + value);
                 sql.append(") AS " + as + " ON p.id=" + as + ".id\n");
             }
         }

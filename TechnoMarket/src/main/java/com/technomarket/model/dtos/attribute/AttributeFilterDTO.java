@@ -16,9 +16,10 @@ import javax.validation.constraints.NotBlank;
 public class AttributeFilterDTO {
 
     @NotBlank
-    private String name;
+    private int id;
 
     @NotBlank
     private String value;
 
 }
+// attribute only by id
