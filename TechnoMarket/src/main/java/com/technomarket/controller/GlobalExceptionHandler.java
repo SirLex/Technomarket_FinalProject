@@ -9,6 +9,7 @@ import com.technomarket.model.dtos.ErrorDTO;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.UnexpectedTypeException;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
@@ -101,6 +104,28 @@ public class GlobalExceptionHandler{
     public ErrorDTO handleValidation(MethodArgumentNotValidException e) {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg("Not valid data. "+e.getBindingResult().getFieldError().getDefaultMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
+    @ExceptionHandler(DateTimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleDateTimeValidation(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("Not valid DateTime format.");
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        dto.setTime(LocalDateTime.now());
+        e.printStackTrace();
+        return dto;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleMessageNotReadable(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg("Not valid DateTime format. "+e.getMessage());
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
         dto.setTime(LocalDateTime.now());
         e.printStackTrace();
