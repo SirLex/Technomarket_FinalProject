@@ -271,6 +271,10 @@ public class ProductService {
             throw new BadRequestException("Product with this id doesn't exist");
         }
         Product product = productRepository.getById(productId);
+        if(product.getImages().isEmpty()){
+            return new MessageDTO("No pictures found",LocalDateTime.now());
+        }
+
         for (ProductImage image :  product.getImages()) {
             File file = new File("uploads"+File.separator+image.getUrl());
             Files.copy(file.toPath(),response.getOutputStream());

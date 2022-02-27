@@ -57,8 +57,10 @@ public class ProductResponseDTO {
         }
 
         this.attributes = new ArrayList<>();
-        for (ProductAttribute productAttribute : product.getProductAttribute()) {
-            attributes.add(new AttributeWithValueDTO(productAttribute));
+        if (product.getProductAttribute() != null) {
+            for (ProductAttribute productAttribute : product.getProductAttribute()) {
+                attributes.add(new AttributeWithValueDTO(productAttribute));
+            }
         }
     }
 
