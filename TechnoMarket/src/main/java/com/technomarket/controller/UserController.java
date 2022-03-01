@@ -75,7 +75,9 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpSession session) {
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpServletRequest request) {
+        validateLogin(request);
+        HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(UserController.USER_ID);
         if (userId != id && !userService.adminValidation(userId)) {
             throw new AuthorizationException("You dont have the rights for this operation");
